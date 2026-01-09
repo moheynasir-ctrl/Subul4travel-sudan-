@@ -1,1210 +1,331 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سُبُل - منصة العودة الطوعية للسودان</title>
+    <title>🚀 خاتم المرسلين للشحن - النسخة المطوّرة</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-    <!-- شريط التنقل -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="#" class="logo">سُبُل</a>
-            <ul class="nav-links">
-                <li><a href="#"><i class="fas fa-home"></i> الرئيسية</a></li>
-                <li><a href="#"><i class="fas fa-bus"></i> الرحلات</a></li>
-                <li><a href="#"><i class="fas fa-info-circle"></i> عن المنصة</a></li>
-                <li><a href="#"><i class="fas fa-user"></i> حسابي</a></li>
-            </ul>
-            <a href="#" class="btn btn-login">تسجيل الدخول</a>
-        </div>
-    </nav>
+    <!-- العناصر الطافية -->
+    <div class="floating-elements">
+        <div class="floating-element" style="top: 10%; left: 5%;">🚚</div>
+        <div class="floating-element" style="top: 20%; right: 10%;">📦</div>
+        <div class="floating-element" style="bottom: 30%; left: 15%;">⚡</div>
+        <div class="floating-element" style="bottom: 20%; right: 5%;">💨</div>
+        <div class="floating-element" style="top: 50%; left: 20%;">✨</div>
+    </div>
 
-    <!-- قسم البحث -->
-    <section class="hero">
-        <div class="container">
-            <h1>طريقك الآمن للعودة إلى الديار</h1>
-            <p class="subtitle">احجز رحلتك إلى السودان بسهولة واطمئنان. اعرف مسار الرحلة وأوقاتها وأماكن الاستراحة.</p>
+    <!-- الهيدر المطور -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>خاتم المرسلين للشحن</h1>
+                    <p>سرعة ✦ دقة ✦ أمان ✦ احترافية</p>
+                </div>
+            </a>
             
-            <div class="search-box">
-                <div class="input-group">
-                    <label for="from"><i class="fas fa-map-marker-alt"></i> من</label>
-                    <input type="text" id="from" placeholder="مدينة المغادرة">
+            <div class="header-stats">
+                <div class="stat-item">
+                    <span class="number" id="activeTripsCount">245</span>
+                    <span class="label">رحلة نشطة</span>
                 </div>
-                <div class="input-group">
-                    <label for="to"><i class="fas fa-flag"></i> إلى</label>
-                    <input type="text" id="to" value="السودان" readonly>
+                <div class="stat-item">
+                    <span class="number" id="successRate">98%</span>
+                    <span class="label">معدل نجاح</span>
                 </div>
-                <div class="input-group">
-                    <label for="date"><i class="fas fa-calendar-alt"></i> تاريخ السفر</label>
-                    <input type="date" id="date">
-                </div>
-                <div class="input-group">
-                    <label for="passengers"><i class="fas fa-users"></i> عدد المسافرين</label>
-                    <input type="number" id="passengers" min="1" value="1">
-                </div>
-                <button class="btn btn-primary btn-search"><i class="fas fa-search"></i> ابحث عن رحلات</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم عرض الرحلات -->
-    <section class="trips">
-        <div class="container">
-            <h2>رحلات متاحة</h2>
-            <div class="trip-list" id="tripList">
-                <!-- هنا سيتم عرض الرحلات بواسطة JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- المميزات -->
-    <section class="features">
-        <div class="container">
-            <h2>لماذا تختار سُبُل؟</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-shield-alt"></i>
-                    <h3>آمن وموثوق</h3>
-                    <p>شركاؤنا من أفضل شركات النقل الموثوقة</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-map-marked-alt"></i>
-                    <h3>تتبع مباشر</h3>
-                    <p>تتبع موقع الحافلة في الوقت الحقيقي</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-credit-card"></i>
-                    <h3>دفع آمن</h3>
-                    <p>خيارات دفع متنوعة ومشفرة</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-headset"></i>
-                    <h3>دعم على مدار الساعة</h3>
-                    <p>فريق الدعم جاهز لمساعدتك في أي وقت</p>
+                <div class="stat-item">
+                    <span class="number">24/7</span>
+                    <span class="label">دعم فني</span>
                 </div>
             </div>
         </div>
-    </section>
+    </header>
 
-    <!-- التذييل -->
+    <!-- لوحة التحكم -->
+    <div class="dashboard">
+        <!-- القائمة الجانبية -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <span>س</span>
+                </div>
+                <div class="user-info">
+                    <h3>سعيد المرسلي</h3>
+                    <p>مدير العمليات الرئيسي</p>
+                    <div class="user-rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="menu-items">
+                <li><a href="#" class="menu-item active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i>لوحة التحكم<span class="badge">5</span></a></li>
+                <li><a href="#" class="menu-item" data-section="trips"><i class="fas fa-shipping-fast"></i>الرحلات النشطة</a></li>
+                <li><a href="#" class="menu-item" data-section="tracking"><i class="fas fa-map-marked-alt"></i>تتبع الشحنات</a></li>
+                <li><a href="#" class="menu-item" data-section="meals"><i class="fas fa-utensils"></i>مواعيد الأكل</a></li>
+                <li><a href="#" class="menu-item" data-section="customers"><i class="fas fa-users"></i>العملاء<span class="badge">12</span></a></li>
+                <li><a href="#" class="menu-item" data-section="reports"><i class="fas fa-chart-line"></i>التقارير والإحصائيات</a></li>
+                <li><a href="#" class="menu-item" data-section="billing"><i class="fas fa-wallet"></i>الفواتير والمدفوعات</a></li>
+                <li><a href="#" class="menu-item" data-section="settings"><i class="fas fa-cogs"></i>الإعدادات</a></li>
+                <li><a href="#" class="menu-item" data-section="support"><i class="fas fa-headset"></i>الدعم الفني</a></li>
+                <li><a href="#" class="menu-item" data-section="logout"><i class="fas fa-sign-out-alt"></i>تسجيل الخروج</a></li>
+            </ul>
+
+            <div class="btn-group" style="margin-top: 30px;">
+                <button class="btn btn-icon btn-primary" id="quickAdd"><i class="fas fa-plus"></i></button>
+                <button class="btn btn-icon btn-success" id="notificationsBtn"><i class="fas fa-bell"></i></button>
+                <button class="btn btn-icon btn-warning" id="settingsBtn"><i class="fas fa-cog"></i></button>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content">
+            <!-- إحصائيات حية -->
+            <div class="live-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-truck"></i></div>
+                    <div class="stat-value" id="activeShipments">245</div>
+                    <div class="stat-label">شحنة نشطة</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-value" id="remainingTime">18:22</div>
+                    <div class="stat-label">الوقت المتبقي</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="stat-value" id="nextMealTime">03:45</div>
+                    <div class="stat-label">الوجبة التالية</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-road"></i></div>
+                    <div class="stat-value" id="journeyProgress">85%</div>
+                    <div class="stat-label">إنجاز المسار</div>
+                </div>
+            </div>
+
+            <!-- نموذج البحث المتقدم -->
+            <div class="search-container">
+                <h2 class="search-title"><i class="fas fa-search"></i>بحث متقدم عن الشحنات</h2>
+                <div class="search-grid">
+                    <div class="input-group">
+                        <label><i class="fas fa-map-marker-alt"></i>من</label>
+                        <select class="form-control" id="fromCity">
+                            <option>اختر مدينة المغادرة</option>
+                            <option>الرياض</option>
+                            <option>جدة</option>
+                            <option>الدمام</option>
+                            <option>مكة المكرمة</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-flag"></i>إلى</label>
+                        <select class="form-control" id="toCity">
+                            <option>اختر مدينة الوصول</option>
+                            <option>الخرطوم</option>
+                            <option>بورتسودان</option>
+                            <option>أبو ظبي</option>
+                            <option>الدوحة</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-calendar"></i>تاريخ الشحن</label>
+                        <input type="date" class="form-control" id="shipmentDate">
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-weight"></i>الوزن (كجم)</label>
+                        <input type="number" class="form-control" id="weight" placeholder="أدخل الوزن">
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="searchBtn"><i class="fas fa-search"></i>بحث عن شحنة</button>
+                    <button class="btn btn-secondary" id="addShipmentBtn"><i class="fas fa-plus-circle"></i>إضافة شحنة جديدة</button>
+                    <button class="btn btn-success" id="exportBtn"><i class="fas fa-file-export"></i>تصدير النتائج</button>
+                </div>
+            </div>
+
+            <!-- الشبكة الرئيسية -->
+            <div class="main-grid">
+                <!-- بطاقة مواعيد الأكل -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-utensils"></i>برنامج الوجبات</h3>
+                        <button class="btn btn-icon btn-warning" id="addMealBtn"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="mealProgress" style="width: 75%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                            <span>الفطور</span>
+                            <span>العشاء</span>
+                        </div>
+                    </div>
+                    <div class="meal-list" style="margin-top: 20px;">
+                        <div class="meal-item">
+                            <span>⏰ 07:00 - فطور</span>
+                            <span class="badge badge-success">مكتمل</span>
+                        </div>
+                        <div class="meal-item">
+                            <span>⏰ 13:30 - غداء</span>
+                            <span class="badge badge-warning">قريب</span>
+                        </div>
+                        <div class="meal-item">
+                            <span>⏰ 20:00 - عشاء</span>
+                            <span class="badge badge-secondary">مخطط</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- بطاقة توقيت الرحلة -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-clock"></i>ساعة الرحلة</h3>
+                        <button class="btn btn-icon btn-info" id="refreshClockBtn"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div class="clock-display">
+                        <div class="journey-clock" id="journeyClock">18:22:45</div>
+                        <div class="clock-label">متبقي حتى الوصول</div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline" id="pauseJourneyBtn"><i class="fas fa-pause"></i>إيقاف مؤقت</button>
+                        <button class="btn btn-success" id="resumeJourneyBtn"><i class="fas fa-play"></i>استئناف</button>
+                    </div>
+                </div>
+
+                <!-- بطاقة التنبيهات -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-bell"></i>التنبيهات المهمة</h3>
+                        <span class="badge" id="notificationCount">5 جديد</span>
+                    </div>
+                    <div class="notification-list">
+                        <div class="notification-item fuel-notification">
+                            <div class="notification-icon"><i class="fas fa-gas-pump"></i></div>
+                            <div class="notification-content">
+                                <strong>⛽ تذكير الوقود</strong>
+                                <p>مستوى الوقود: 35% - يوصى بالتزود</p>
+                                <small>منذ 15 دقيقة</small>
+                            </div>
+                        </div>
+                        <div class="notification-item meal-notification">
+                            <div class="notification-icon"><i class="fas fa-utensils"></i></div>
+                            <div class="notification-content">
+                                <strong>🍽️ وجبة قريبة</strong>
+                                <p>وجبة الغداء في استراحة القصيم</p>
+                                <small>بعد 45 دقيقة</small>
+                            </div>
+                        </div>
+                        <div class="notification-item checkpoint-notification">
+                            <div class="notification-icon"><i class="fas fa-traffic-light"></i></div>
+                            <div class="notification-content">
+                                <strong>🚧 نقطة تفتيش</strong>
+                                <p>تجهيز مستندات المركبة</p>
+                                <small>بعد 30 دقيقة</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- قسم التتبع الحي -->
+            <div class="card full-width">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-map-marked-alt"></i>التتبع الحي للشحنات</h3>
+                    <div class="connection-status">
+                        <span class="status-indicator connected"></span>
+                        <span>اتصال مباشر</span>
+                    </div>
+                </div>
+                <div id="trackingMap"></div>
+                <div class="tracking-controls">
+                    <button class="btn btn-primary" id="zoomInBtn"><i class="fas fa-search-plus"></i>تكبير</button>
+                    <button class="btn btn-secondary" id="zoomOutBtn"><i class="fas fa-search-minus"></i>تصغير</button>
+                    <button class="btn btn-primary" id="centerMapBtn"><i class="fas fa-crosshairs"></i>مركزة على الحافلة</button>
+                    <button class="btn btn-secondary" id="showRouteBtn"><i class="fas fa-route"></i>عرض المسار الكامل</button>
+                    <div class="current-location">
+                        <i class="fas fa-location-dot"></i>
+                        <span id="currentLocation">الرياض - الطريق السريع</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار الإجراءات الرئيسية -->
+            <div class="action-buttons main-actions">
+                <button class="btn btn-primary" id="startJourneyBtn"><i class="fas fa-truck-loading"></i>بدء رحلة جديدة</button>
+                <button class="btn btn-success" id="createInvoiceBtn"><i class="fas fa-file-invoice-dollar"></i>إنشاء فاتورة</button>
+                <button class="btn btn-warning" id="viewReportsBtn"><i class="fas fa-chart-pie"></i>عرض التقارير</button>
+                <button class="btn btn-info" id="systemSettingsBtn"><i class="fas fa-cogs"></i>إعدادات النظام</button>
+                <button class="btn btn-secondary" id="contactSupportBtn"><i class="fas fa-headset"></i>اتصال بالدعم</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- الفوتر المطور -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>سُبُل</h3>
-                    <p>منصة العودة الطوعية للسودان. نسهل طريق العودة بأمان وثقة.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>روابط سريعة</h3>
-                    <ul>
-                        <li><a href="#">الرئيسية</a></li>
-                        <li><a href="#">الرحلات</a></li>
-                        <li><a href="#">عن المنصة</a></li>
-                        <li><a href="#">اتصل بنا</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>اتصل بنا</h3>
-                    <p><i class="fas fa-phone"></i> +123456789</p>
-                    <p><i class="fas fa-envelope"></i> info@subul.com</p>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>عن الشركة</h3>
+                <p>خاتم المرسلين للشحن - نقدم خدمات لوجستية متكاملة بمعايير عالمية. نضمن لكم توصيل آمن وسريع مع مراعاة جميع التفاصيل.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
-            <p class="copyright">© 2023 سُبُل. جميع الحقوق محفوظة.</p>
+            
+            <div class="footer-section">
+                <h3>روابط سريعة</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>الرئيسية</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>عن الشركة</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>خدماتنا</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>الأسعار</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>اتصل بنا</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>خدماتنا</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>الشحن البري</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>الشحن الجوي</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>الشحن البحري</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>التخزين</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i>التوزيع</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>معلومات الاتصال</h3>
+                <p><i class="fas fa-map-marker-alt"></i> الرياض - المملكة العربية السعودية</p>
+                <p><i class="fas fa-phone"></i> 0112345678</p>
+                <p><i class="fas fa-envelope"></i> info@khatem-almorsaleen.com</p>
+                <p><i class="fas fa-clock"></i> 24/7 خدمة العملاء</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>© 2024 خاتم المرسلين للشحن. جميع الحقوق محفوظة.</p>
+            <p class="developer-credit">تم التطوير بـ ❤️ لخدمتكم</p>
         </div>
     </footer>
 
-    <script src="script.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سُبُل - منصة الرحلات الذكية من مصر إلى السودان</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        :root {
-            --primary: #ce1126;
-            --secondary: #007a3d;
-            --accent: #ffd700;
-            --dark: #1a1a1a;
-            --light: #fff5f5;
-            --success: #28a745;
-            --warning: #ffc107;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #fff5f5 100%);
-            color: #333;
-            line-height: 1.8;
-            direction: rtl;
-            min-height: 100vh;
-        }
-
-        /* تصميم شريط التحميل المتحرك */
-        .loading-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
-            z-index: 9999;
-            animation: loading 2s infinite;
-            transform-origin: left;
-        }
-
-        @keyframes loading {
-            0% { transform: scaleX(0); }
-            50% { transform: scaleX(1); }
-            100% { transform: scaleX(0); }
-        }
-
-        /* تحسين شريط التنقل */
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 15px 0;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            padding: 10px 0;
-            background: rgba(255, 255, 255, 0.98);
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: logoPulse 3s infinite;
-        }
-
-        @keyframes logoPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .notification-badge {
-            position: relative;
-        }
-
-        .notification-badge::after {
-            content: 'جديد!';
-            position: absolute;
-            top: -8px;
-            left: -8px;
-            background: var(--accent);
-            color: var(--dark);
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        /* تصميم البطل مع تأثيرات */
-        .hero {
-            position: relative;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                        url('https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-attachment: fixed;
-            color: white;
-            padding: 120px 0 80px;
-            overflow: hidden;
-        }
-
-        .floating-icons {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-        }
-
-        .floating-icon {
-            position: absolute;
-            font-size: 24px;
-            opacity: 0.3;
-            animation: float 6s infinite ease-in-out;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
-
-        .search-box {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(206, 17, 38, 0.3);
-            transform: translateY(0);
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .search-box::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary));
-            border-radius: 22px;
-            z-index: -1;
-            animation: borderGlow 3s infinite;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .search-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 70px rgba(206, 17, 38, 0.4);
-        }
-
-        /* تصميم بطاقات الرحلات بتأثيرات 3D */
-        .trip-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .trip-card:hover {
-            transform: translateY(-15px) rotateX(5deg);
-            box-shadow: 0 30px 60px rgba(206, 17, 38, 0.2);
-        }
-
-        .trip-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .trip-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        /* مؤقت العروض الخاصة */
-        .offer-timer {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            margin: 40px auto;
-            max-width: 800px;
-            box-shadow: 0 10px 30px rgba(206, 17, 38, 0.3);
-            animation: slideIn 1s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .timer-numbers {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .timer-unit {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            min-width: 80px;
-        }
-
-        .timer-number {
-            font-size: 42px;
-            font-weight: 900;
-            display: block;
-        }
-
-        .timer-label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        /* خريطة تفاعلية */
-        #tripMap {
-            height: 400px;
-            border-radius: 15px;
-            margin: 40px 0;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            z-index: 1;
-        }
-
-        /* نظام النجوم التفاعلي */
-        .stars-rating {
-            direction: ltr;
-            unicode-bidi: bidi-override;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .star {
-            color: #ddd;
-            transition: all 0.2s ease;
-        }
-
-        .star:hover,
-        .star.active {
-            color: var(--accent);
-            transform: scale(1.2);
-        }
-
-        /* شريط التقدم */
-        .progress-bar {
-            height: 8px;
-            background: #eee;
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            width: 0%;
-            transition: width 1s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 20px;
-            background: rgba(255, 255, 255, 0.3);
-            animation: progressShine 2s infinite;
-        }
-
-        @keyframes progressShine {
-            0% { left: -20px; }
-            100% { left: 100%; }
-        }
-
-        /* رسومات متحركة */
-        .animated-line {
-            position: relative;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            margin: 40px 0;
-            overflow: hidden;
-        }
-
-        .animated-line::after {
-            content: '🚌';
-            position: absolute;
-            animation: busTravel 10s linear infinite;
-            font-size: 24px;
-        }
-
-        @keyframes busTravel {
-            0% { left: 0%; transform: translateX(-100%); }
-            100% { left: 100%; transform: translateX(0); }
-        }
-
-        /* رسومات إحصائية تفاعلية */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(206, 17, 38, 0.1);
-        }
-
-        .stat-number {
-            font-size: 48px;
-            font-weight: 900;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: block;
-        }
-
-        /* أزرار بتأثيرات خاصة */
-        .btn-magic {
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        .btn-magic::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-            z-index: -1;
-        }
-
-        .btn-magic:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-sparkle {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-sparkle::after {
-            content: '✨';
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            animation: sparkle 1s infinite;
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-
-        /* مؤشر التمرير */
-        .scroll-indicator {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: 0 5px 15px rgba(206, 17, 38, 0.3);
-        }
-
-        .scroll-indicator.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .scroll-indicator:hover {
-            transform: translateY(-5px) scale(1.1);
-        }
-
-        /* تأثيرات دخول العناصر */
-        [data-aos] {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-
-        [data-aos].aos-animate {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* تأثيرات النص */
-        .text-gradient {
-            background: linear-gradient(45deg, var(--primary), var(--accent), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: textShine 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes textShine {
-            from { background-position: 0% 50%; }
-            to { background-position: 100% 50%; }
-        }
-
-        /* تأثيرات الإشعارات */
-        .notification {
-            position: fixed;
-            top: 100px;
-            left: 20px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transform: translateX(-100%);
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 9999;
-            border-right: 5px solid var(--success);
-            max-width: 300px;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        /* تصميم متجاوب متقدم */
-        @media (max-width: 768px) {
-            .hero {
-                padding: 100px 0 60px;
-                background-attachment: scroll;
-            }
-            
-            .timer-numbers {
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-            
-            .timer-unit {
-                min-width: 70px;
-            }
-            
-            .search-box {
-                padding: 20px;
-            }
-            
-            .stat-card {
-                padding: 20px;
-            }
-        }
-
-        /* تأثيرات الظل المتحركة */
-        .shadow-animate {
-            animation: shadowPulse 2s infinite alternate;
-        }
-
-        @keyframes shadowPulse {
-            from { box-shadow: 0 10px 30px rgba(206, 17, 38, 0.2); }
-            to { box-shadow: 0 20px 50px rgba(206, 17, 38, 0.4); }
-        }
-    </style>
-</head>
-<body>
-    <!-- شريط التحميل المتحرك -->
-    <div class="loading-bar"></div>
-
-    <!-- زر العودة للأعلى -->
-    <div class="scroll-indicator" id="scrollToTop">
-        <i class="fas fa-arrow-up"></i>
-    </div>
-
-    <!-- شريط التنقل -->
-    <nav class="navbar" id="navbar">
-        <div class="container">
-            <a href="#" class="logo">
-                <i class="fas fa-bus"></i>
-                <span>سُبُل</span>
-                <span class="notification-badge"></span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#" class="btn-magic"><i class="fas fa-home"></i> الرئيسية</a></li>
-                <li><a href="#trips" class="btn-magic"><i class="fas fa-bus"></i> الرحلات</a></li>
-                <li><a href="#map" class="btn-magic"><i class="fas fa-map-marked-alt"></i> المسار الحي</a></li>
-                <li><a href="#offers" class="btn-sparkle"><i class="fas fa-gift"></i> العروض</a></li>
-                <li><a href="#" class="btn btn-login"><i class="fas fa-user-circle"></i> حسابي</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <!-- قسم البطل -->
-    <section class="hero">
-        <div class="floating-icons">
-            <div class="floating-icon" style="top: 10%; left: 10%;">🚌</div>
-            <div class="floating-icon" style="top: 20%; right: 15%;">🧳</div>
-            <div class="floating-icon" style="bottom: 30%; left: 20%;">📍</div>
-            <div class="floating-icon" style="bottom: 20%; right: 10%;">🎫</div>
-        </div>
-        
-        <div class="container">
-            <div data-aos="fade-down">
-                <div class="flags" style="text-align: center; font-size: 28px; margin-bottom: 20px;">
-                    <span>🇪🇬</span>
-                    <i class="fas fa-exchange-alt" style="margin: 0 20px;"></i>
-                    <span>🇸🇩</span>
-                </div>
-                <h1 style="font-size: 48px; margin-bottom: 20px;" class="text-gradient">
-                    رحلة لا تُنسى بين مصر والسودان
-                </h1>
-                <p class="subtitle" style="font-size: 20px; max-width: 800px; margin: 0 auto 40px;">
-                    تجربة سفر استثنائية تجمع بين الراحة والأمان والمتعة. ابدأ رحلتك الآن!
-                </p>
-            </div>
-
-            <!-- مؤقت العروض -->
-            <div class="offer-timer shadow-animate" data-aos="zoom-in" id="offers">
-                <h3 style="margin-bottom: 15px;">
-                    <i class="fas fa-bolt" style="color: var(--accent);"></i>
-                    عرض خاص لفترة محدودة!
-                </h3>
-                <p style="margin-bottom: 20px;">خصم 20% على الحجوزات السريعة. ينتهي العرض خلال:</p>
-                <div class="timer-numbers">
-                    <div class="timer-unit">
-                        <span class="timer-number" id="hours">00</span>
-                        <span class="timer-label">ساعات</span>
-                    </div>
-                    <div class="timer-unit">
-                        <span class="timer-number" id="minutes">00</span>
-                        <span class="timer-label">دقائق</span>
-                    </div>
-                    <div class="timer-unit">
-                        <span class="timer-number" id="seconds">00</span>
-                        <span class="timer-label">ثواني</span>
-                    </div>
-                </div>
-                <button class="btn btn-primary btn-magic" style="margin-top: 20px;">
-                    <i class="fas fa-bolt"></i> احصل على العرض الآن
-                </button>
-            </div>
-
-            <!-- صندوق البحث -->
-            <div class="search-box" data-aos="fade-up">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <h2 style="color: var(--primary); margin-bottom: 10px;">
-                        <i class="fas fa-search-location"></i> ابحث عن رحلتك المثالية
-                    </h2>
-                    <p style="color: #666;">اختر مسارك وابدأ المغامرة</p>
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                    <div class="input-group">
-                        <label for="from"><i class="fas fa-map-marker-alt"></i> المغادرة من</label>
-                        <div class="select-wrapper" style="position: relative;">
-                            <select id="from" class="city-select" style="width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px;">
-                                <option value="">اختر مدينة المغادرة</option>
-                                <option value="cairo">القاهرة 🏙️</option>
-                                <option value="alexandria">الإسكندرية 🌊</option>
-                                <option value="aswan">أسوان ☀️</option>
-                                <option value="luxor">الأقصر 🏛️</option>
-                            </select>
-                            <i class="fas fa-chevron-down" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="to"><i class="fas fa-flag"></i> الوصول إلى</label>
-                        <div class="select-wrapper" style="position: relative;">
-                            <select id="to" class="city-select" style="width: 100%; padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px;">
-                                <option value="">اختر مدينة الوصول</option>
-                                <option value="khartoum">الخرطوم 🌴</option>
-                                <option value="portSudan">بورتسودان 🚢</option>
-                                <option value="nyala">نيالا 🏜️</option>
-                                <option value="kasala">كسلا ⛰️</option>
-                            </select>
-                            <i class="fas fa-chevron-down" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="date"><i class="fas fa-calendar-star"></i> تاريخ السفر</label>
-                        <input type="date" id="date" style="padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px;">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="passengers"><i class="fas fa-users"></i> المسافرين</label>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <button class="btn-passenger" onclick="changePassengers(-1)" style="background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">-</button>
-                            <input type="number" id="passengers" min="1" max="10" value="1" style="width: 60px; text-align: center; border: 2px solid #ddd; border-radius: 8px; padding: 5px;">
-                            <button class="btn-passenger" onclick="changePassengers(1)" style="background: var(--primary); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer;">+</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="btn btn-primary btn-magic btn-search" style="width: 100%; padding: 15px; margin-top: 30px; font-size: 18px;">
-                    <i class="fas fa-magic"></i> ابحث عن رحلات سحرية
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- إحصائيات حية -->
-    <section style="padding: 60px 0; background: white;">
-        <div class="container">
-            <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary);" data-aos="fade-up">
-                <i class="fas fa-chart-line"></i> إحصائيات حية
-            </h2>
-            <div class="stats-grid">
-                <div class="stat-card" data-aos="flip-left">
-                    <div class="stat-number" data-count="1250">0</div>
-                    <h4>رحلة ناجحة</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 85%;"></div>
-                    </div>
-                </div>
-                <div class="stat-card" data-aos="flip-left" data-aos-delay="200">
-                    <div class="stat-number" data-count="98">0</div>
-                    <h4>رضا العملاء %</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 98%;"></div>
-                    </div>
-                </div>
-                <div class="stat-card" data-aos="flip-left" data-aos-delay="400">
-                    <div class="stat-number" data-count="45">0</div>
-                    <h4>شركة نقل</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 75%;"></div>
-                    </div>
-                </div>
-                <div class="stat-card" data-aos="flip-left" data-aos-delay="600">
-                    <div class="stat-number" data-count="24">0</div>
-                    <h4>ساعة دعم</h4>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- خط متحرك -->
-    <div class="animated-line" data-aos="zoom-in"></div>
-
-    <!-- خريطة تفاعلية -->
-    <section id="map" style="padding: 60px 0; background: var(--light);">
-        <div class="container">
-            <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary);" data-aos="fade-up">
-                <i class="fas fa-map"></i> تتبع المسار الحي
-            </h2>
-            <div id="tripMap" data-aos="zoom-in"></div>
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="btn btn-primary btn-magic" onclick="simulateBus()">
-                    <i class="fas fa-play"></i> محاكاة الرحلة
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- قسم التقييم -->
-    <section style="padding: 60px 0; background: white;">
-        <div class="container">
-            <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary);" data-aos="fade-up">
-                <i class="fas fa-star"></i> قيم تجربتك
-            </h2>
-            <div style="background: var(--light); padding: 40px; border-radius: 20px; max-width: 600px; margin: 0 auto;" data-aos="fade-up">
-                <h3 style="text-align: center; margin-bottom: 20px;">كيف كانت تجربتك؟</h3>
-                <div class="stars-rating" id="starRating" style="text-align: center; margin-bottom: 30px;">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                </div>
-                <textarea id="reviewText" placeholder="شاركنا بتجربتك..." style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; margin-bottom: 20px; min-height: 100px;"></textarea>
-                <button class="btn btn-primary btn-magic" style="width: 100%;" onclick="submitReview()">
-                    <i class="fas fa-paper-plane"></i> أرسل التقييم
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- تأثيرات صوتية ومؤثرات -->
-    <audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
-    <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
-
+    <!-- ربط ملفات JavaScript -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // تأثيرات الصفحة
-        const loadingBar = document.querySelector('.loading-bar');
-        const navbar = document.getElementById('navbar');
-        const scrollToTop = document.getElementById('scrollToTop');
-        const successSound = document.getElementById('successSound');
-        const clickSound = document.getElementById('clickSound');
-
-        // إخفاء شريط التحميل بعد تحميل الصفحة
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                loadingBar.style.opacity = '0';
-                setTimeout(() => loadingBar.remove(), 500);
-                showNotification('مرحباً بك في سُبُل! استمتع بتجربة السفر الفريدة');
-            }, 1000);
-        });
-
-        // تأثير شريط التنقل عند التمرير
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-                scrollToTop.classList.add('visible');
-            } else {
-                navbar.classList.remove('scrolled');
-                scrollToTop.classList.remove('visible');
-            }
-            
-            // تأثيرات دخول العناصر
-            const elements = document.querySelectorAll('[data-aos]');
-            elements.forEach(el => {
-                const position = el.getBoundingClientRect();
-                if (position.top < window.innerHeight - 100) {
-                    el.classList.add('aos-animate');
-                }
-            });
-        });
-
-        // مؤقت العرض
-        function updateTimer() {
-            const hours = document.getElementById('hours');
-            const minutes = document.getElementById('minutes');
-            const seconds = document.getElementById('seconds');
-            
-            let totalSeconds = 7200; // ساعتان
-            
-            const timer = setInterval(() => {
-                if (totalSeconds <= 0) {
-                    clearInterval(timer);
-                    document.querySelector('.offer-timer').innerHTML = `
-                        <h3>انتهى العرض!</h3>
-                        <p>تابعنا للعروض القادمة</p>
-                    `;
-                    return;
-                }
-                
-                const h = Math.floor(totalSeconds / 3600);
-                const m = Math.floor((totalSeconds % 3600) / 60);
-                const s = totalSeconds % 60;
-                
-                hours.textContent = h.toString().padStart(2, '0');
-                minutes.textContent = m.toString().padStart(2, '0');
-                seconds.textContent = s.toString().padStart(2, '0');
-                
-                totalSeconds--;
-            }, 1000);
-        }
-
-        // خريطة تفاعلية
-        function initMap() {
-            const map = L.map('tripMap').setView([23.8859, 45.0792], 5);
-            
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-            
-            // نقاط على الخريطة
-            const cairo = L.marker([30.0444, 31.2357]).addTo(map)
-                .bindPopup('القاهرة - نقطة البداية');
-            
-            const khartoum = L.marker([15.5007, 32.5599]).addTo(map)
-                .bindPopup('الخرطوم - نقطة الوصول');
-            
-            // خط الرحلة
-            const route = L.polyline([
-                [30.0444, 31.2357],
-                [22.0000, 32.0000],
-                [18.0000, 33.0000],
-                [15.5007, 32.5599]
-            ], {
-                color: '#ce1126',
-                weight: 3,
-                opacity: 0.7,
-                dashArray: '10, 10'
-            }).addTo(map);
-            
-            window.map = map;
-            window.route = route;
-        }
-
-        // محاكاة حركة الحافلة
-        function simulateBus() {
-            const busIcon = L.divIcon({
-                html: '🚌',
-                className: 'bus-marker',
-                iconSize: [40, 40]
-            });
-            
-            const busMarker = L.marker([30.0444, 31.2357], { icon: busIcon }).addTo(window.map);
-            
-            let points = window.route.getLatLngs();
-            let current = 0;
-            
-            const moveBus = () => {
-                if (current < points.length) {
-                    busMarker.setLatLng(points[current]);
-                    current++;
-                    setTimeout(moveBus, 500);
-                }
-            };
-            
-            moveBus();
-        }
-
-        // نظام النجوم
-        document.querySelectorAll('.star').forEach(star => {
-            star.addEventListener('click', function() {
-                const value = this.getAttribute('data-value');
-                document.querySelectorAll('.star').forEach(s => {
-                    if (s.getAttribute('data-value') <= value) {
-                        s.classList.add('active');
-                        s.style.color = '#ffd700';
-                    } else {
-                        s.classList.remove('active');
-                        s.style.color = '#ddd';
-                    }
-                });
-                clickSound.play();
-            });
-        });
-
-        // إرسال التقييم
-        function submitReview() {
-            const activeStars = document.querySelectorAll('.star.active').length;
-            const review = document.getElementById('reviewText').value;
-            
-            if (activeStars === 0) {
-                showNotification('يرجى اختيار تقييم', 'warning');
-                return;
-            }
-            
-            successSound.play();
-            showNotification(`شكراً لتقييمك بـ ${activeStars} نجوم!`, 'success');
-            document.getElementById('reviewText').value = '';
-            
-            // تأثيرات مرئية
-            document.querySelectorAll('.star').forEach(star => {
-                star.classList.remove('active');
-                star.style.color = '#ddd';
-            });
-            
-            for (let i = 0; i < activeStars; i++) {
-                createFirework();
-            }
-        }
-
-        // الألعاب النارية
-        function createFirework() {
-            const firework = document.createElement('div');
-            firework.style.cssText = `
-                position: fixed;
-                width: 10px;
-                height: 10px;
-                background: ${['#ce1126', '#ffd700', '#007a3d'][Math.floor(Math.random() * 3)]};
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 9998;
-                top: ${Math.random() * 50 + 25}%;
-                left: ${Math.random() * 80 + 10}%;
-                animation: firework 1s ease-out forwards;
-            `;
-            
-            document.body.appendChild(firework);
-            
-            setTimeout(() => firework.remove(), 1000);
-        }
-
-        // الإشعارات
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}" 
-                       style="color: ${type === 'success' ? '#28a745' : '#ce1126'}"></i>
-                    <div>
-                        <strong>${message}</strong>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => notification.classList.add('show'), 100);
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-                setTimeout(() => notification.remove(), 500);
-            }, 3000);
-        }
-
-        // إحصائيات متحركة
-        function animateStats() {
-            document.querySelectorAll('[data-count]').forEach(stat => {
-                const target = parseInt(stat.getAttribute('data-count'));
-                const increment = target / 50;
-                let current = 0;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        stat.textContent = target;
-                        clearInterval(timer);
-                    } else {
-                        stat.textContent = Math.floor(current);
-                    }
-                }, 30);
-            });
-        }
-
-        // تغيير عدد المسافرين
-        function changePassengers(change) {
-            const input = document.getElementById('passengers');
-            let value = parseInt(input.value) + change;
-            value = Math.max(1, Math.min(10, value));
-            input.value = value;
-            clickSound.play();
-        }
-
-        // زر العودة للأعلى
-        scrollToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            clickSound.play();
-        });
-
-        // تأثيرات عند تحميل الصفحة
-        window.addEventListener('DOMContentLoaded', () => {
-            updateTimer();
-            initMap();
-            animateStats();
-            
-            // تأثيرات الأزرار
-            document.querySelectorAll('.btn-magic, .btn-sparkle').forEach(btn => {
-                btn.addEventListener('click', () => clickSound.play());
-            });
-            
-            // تأثيرات الإدخال
-            document.querySelectorAll('input, select').forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.style.transform = 'scale(1.02)';
-                });
-                
-                input.addEventListener('blur', function() {
-                    this.parentElement.style.transform = 'scale(1)';
-                });
-            });
-            
-            // تأثيرات عشوائية
-            setInterval(() => {
-                if (Math.random() > 0.7) {
-                    createFirework();
-                }
-            }, 5000);
-        });
-
-        // تأثيرات للشريط العلوي عند التمرير
-        let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            if (currentScroll <= 0) {
-                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
-                return;
-            }
-            
-            if (currentScroll > lastScroll && currentScroll > 100) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-                navbar.style.boxShadow = '0 10px 40px rgba(0, 0, 0, 0.15)';
-            }
-            lastScroll = currentScroll;
-        });
-
-        // إضافة أنماط للحركات النارية
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes firework {
-                0% { transform: translate(0, 0) scale(1); opacity: 1; }
-                50% { opacity: 1; }
-                100% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(0); opacity: 0; }
-            }
-            
-            .bus-marker {
-                font-size: 30px;
-                animation: bounce 1s infinite alternate;
-            }
-            
-            @keyframes bounce {
-                from { transform: translateY(0); }
-                to { transform: translateY(-10px); }
-            }
-            
-            .btn-passenger:hover {
-                transform: scale(1.1);
-                box-shadow: 0 5px 15px rgba(206, 17, 38, 0.3);
-            }
-            
-            .select-wrapper select {
-                appearance: none;
-                cursor: pointer;
-            }
-            
-            .select-wrapper select:focus {
-                border-color: #ce1126;
-                box-shadow: 0 0 0 3px rgba(206, 17, 38, 0.1);
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -1,1265 +1,1144 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خاتم المرسلين - نظام الرحلات الذكي</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        :root {
-            --primary: #1a5fb4;
-            --secondary: #2d8c4a;
-            --accent: #ffd700;
-            --food: #e74c3c;
-            --rest: #9b59b6;
-            --dark: #0d3b66;
-            --light: #f8f9fa;
-            --warning: #f39c12;
-            --success: #27ae60;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
-            color: #333;
-            line-height: 1.8;
-            direction: rtl;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* شريط التنقل المطور */
-        .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--dark));
-            color: white;
-            padding: 15px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(26, 95, 180, 0.3);
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-            color: white;
-        }
-
-        .logo-icon {
-            font-size: 28px;
-            background: var(--accent);
-            color: var(--dark);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: logoSpin 10s linear infinite;
-        }
-
-        @keyframes logoSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .logo-text h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .logo-text p {
-            font-size: 12px;
-            opacity: 0.9;
-            margin: 0;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .live-indicator {
-            background: var(--success);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        /* لوحة التحكم الرئيسية */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 30px;
-            padding: 30px 0;
-            min-height: calc(100vh - 120px);
-        }
-
-        /* القائمة الجانبية */
-        .sidebar {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            height: fit-content;
-            position: sticky;
-            top: 100px;
-        }
-
-        .user-profile {
-            text-align: center;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            margin-bottom: 20px;
-        }
-
-        .user-avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: white;
-            font-weight: bold;
-        }
-
-        .user-info h3 {
-            margin: 0 0 5px;
-            color: var(--dark);
-        }
-
-        .user-info p {
-            color: #666;
-            font-size: 14px;
-            margin: 0;
-        }
-
-        .menu-items {
-            list-style: none;
-        }
-
-        .menu-item {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #555;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .menu-item:hover {
-            background: var(--light);
-            transform: translateX(-5px);
-        }
-
-        .menu-item.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .menu-item i {
-            font-size: 20px;
-            width: 24px;
-            text-align: center;
-        }
-
-        /* المحتوى الرئيسي */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        /* بطاقة الإحصائيات */
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-        }
-
-        .stat-info h3 {
-            font-size: 32px;
-            margin: 0;
-            color: var(--dark);
-        }
-
-        .stat-info p {
-            color: #666;
-            margin: 5px 0 0;
-            font-size: 14px;
-        }
-
-        /* نظام مواعيد الأكل */
-        .meal-schedule {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #eee;
-        }
-
-        .section-header h2 {
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .meal-timeline {
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .meal-timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary));
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-
-        .meal-item {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            position: relative;
-            margin-right: 50%;
-            width: calc(50% - 20px);
-            border-right: 4px solid;
-        }
-
-        .meal-item:nth-child(even) {
-            margin-right: 0;
-            margin-left: 50%;
-            border-right: none;
-            border-left: 4px solid;
-        }
-
-        .meal-time {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--dark);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .meal-type {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .meal-type.breakfast { background: #f39c12; border-color: #f39c12; }
-        .meal-type.lunch { background: #e74c3c; border-color: #e74c3c; }
-        .meal-type.dinner { background: #9b59b6; border-color: #9b59b6; }
-        .meal-type.snack { background: #3498db; border-color: #3498db; }
-
-        /* نظام الساعة التفاعلية */
-        .trip-clock {
-            background: linear-gradient(135deg, var(--dark), #1c3d6a);
-            border-radius: 20px;
-            padding: 30px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(26, 95, 180, 0.3);
-        }
-
-        .clock-header {
-            margin-bottom: 30px;
-        }
-
-        .clock-display {
-            font-size: 72px;
-            font-weight: 900;
-            font-family: 'Courier New', monospace;
-            margin: 20px 0;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-
-        .clock-info {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
-        }
-
-        .clock-item {
-            text-align: center;
-        }
-
-        .clock-item .label {
-            font-size: 14px;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .clock-item .value {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        /* خريطة التتبع الحي */
-        .live-tracking {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        #trackingMap {
-            height: 400px;
-            border-radius: 15px;
-            margin-top: 20px;
-            border: 3px solid var(--light);
-        }
-
-        .tracking-controls {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        /* نظام التنبيهات */
-        .notifications-panel {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .notification-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .notification-item {
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            background: var(--light);
-            border-right: 4px solid;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .notification-item:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .notification-item.info { border-color: var(--primary); }
-        .notification-item.warning { border-color: var(--warning); }
-        .notification-item.success { border-color: var(--success); }
-        .notification-item.food { border-color: var(--food); }
-
-        .notification-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: white;
-        }
-
-        .notification-item.info .notification-icon { background: var(--primary); }
-        .notification-item.warning .notification-icon { background: var(--warning); }
-        .notification-item.success .notification-icon { background: var(--success); }
-        .notification-item.food .notification-icon { background: var(--food); }
-
-        /* توقيت الرحلة */
-        .journey-timing {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .timeline {
-            position: relative;
-            padding: 40px 0;
-        }
-
-        .timeline-event {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .event-time {
-            min-width: 100px;
-            font-weight: bold;
-            color: var(--dark);
-            font-size: 18px;
-        }
-
-        .event-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: white;
-            border: 4px solid;
-            margin: 0 20px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .event-dot.departure { border-color: var(--primary); }
-        .event-dot.meal { border-color: var(--food); }
-        .event-dot.rest { border-color: var(--rest); }
-        .event-dot.arrival { border-color: var(--success); }
-
-        .event-content {
-            flex: 1;
-            background: var(--light);
-            padding: 20px;
-            border-radius: 12px;
-            border-right: 4px solid;
-        }
-
-        .event-content.departure { border-color: var(--primary); }
-        .event-content.meal { border-color: var(--food); }
-        .event-content.rest { border-color: var(--rest); }
-        .event-content.arrival { border-color: var(--success); }
-
-        /* الأزرار */
-        .btn {
-            padding: 12px 25px;
-            border-radius: 10px;
-            border: none;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 16px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(26, 95, 180, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--light);
-            color: var(--dark);
-            border: 2px solid #ddd;
-        }
-
-        /* محاكاة الوقت الحقيقي */
-        .time-simulator {
-            background: linear-gradient(135deg, var(--secondary), var(--success));
-            color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
-
-        .simulator-controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            flex-wrap: wrap;
-        }
-
-        .simulator-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid white;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .simulator-btn:hover {
-            background: white;
-            color: var(--secondary);
-        }
-
-        /* تصميم متجاوب */
-        @media (max-width: 1200px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                position: static;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .stats-cards {
-                grid-template-columns: 1fr;
-            }
-            
-            .clock-display {
-                font-size: 48px;
-            }
-            
-            .meal-item {
-                width: 100%;
-                margin-right: 0;
-                margin-left: 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .clock-display {
-                font-size: 36px;
-            }
-            
-            .clock-info {
-                flex-direction: column;
-                gap: 20px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- شريط التنقل -->
-    <nav class="navbar">
-        <div class="container nav-container">
-            <a href="#" class="logo">
-                <div class="logo-icon">🚌</div>
-                <div class="logo-text">
-                    <h1>خاتم المرسلين للشحن</h1>
-                    <p>نظام إدارة الرحلات الذكي</p>
-                </div>
-            </a>
-            <div class="nav-buttons">
-                <div class="live-indicator">
-                    <i class="fas fa-circle" style="font-size: 8px;"></i>
-                    مباشر
-                </div>
-                <div id="currentDate" style="background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 10px;">
-                    <!-- سيتم تعبئته بواسطة JavaScript -->
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- لوحة التحكم -->
-    <div class="container dashboard">
-        <!-- القائمة الجانبية -->
-        <aside class="sidebar">
-            <div class="user-profile">
-                <div class="user-avatar">س</div>
-                <div class="user-info">
-                    <h3>سعيد محمد</h3>
-                    <p>سائق معتمد</p>
-                    <div style="margin-top: 10px; color: var(--accent);">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                </div>
-            </div>
-            
-            <ul class="menu-items">
-                <li><a href="#" class="menu-item active" data-view="dashboard"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
-                <li><a href="#" class="menu-item" data-view="trips"><i class="fas fa-route"></i> الرحلات النشطة</a></li>
-                <li><a href="#" class="menu-item" data-view="meals"><i class="fas fa-utensils"></i> مواعيد الأكل</a></li>
-                <li><a href="#" class="menu-item" data-view="clock"><i class="fas fa-clock"></i> ساعة الرحلة</a></li>
-                <li><a href="#" class="menu-item" data-view="tracking"><i class="fas fa-map-marked-alt"></i> التتبع الحي</a></li>
-                <li><a href="#" class="menu-item" data-view="notifications"><i class="fas fa-bell"></i> التنبيهات</a></li>
-                <li><a href="#" class="menu-item" data-view="timing"><i class="fas fa-timeline"></i> توقيت الرحلة</a></li>
-                <li><a href="#" class="menu-item" data-view="reports"><i class="fas fa-chart-bar"></i> التقارير</a></li>
-                <li><a href="#" class="menu-item" data-view="settings"><i class="fas fa-cog"></i> الإعدادات</a></li>
-            </ul>
-        </aside>
-
-        <!-- المحتوى الرئيسي -->
-        <main class="main-content">
-            <!-- إحصائيات سريعة -->
-            <div class="stats-cards">
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: var(--primary);">
-                        <i class="fas fa-route"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="activeTrips">12</h3>
-                        <p>رحلات نشطة</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: var(--success);">
-                        <i class="fas fa-utensils"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="nextMeal">03:45</h3>
-                        <p>الوجبة التالية</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: var(--warning);">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="journeyTime">18:22</h3>
-                        <p>متبقي من الرحلة</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon" style="background: var(--food);">
-                        <i class="fas fa-truck"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="distanceTraveled">245</h3>
-                        <p>كم المقطوعة</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- قسم مواعيد الأكل -->
-            <section class="meal-schedule">
-                <div class="section-header">
-                    <h2><i class="fas fa-calendar-alt"></i> برنامج الوجبات اليومي</h2>
-                    <button class="btn btn-primary"><i class="fas fa-plus"></i> إضافة وجبة</button>
-                </div>
-                
-                <div class="meal-timeline">
-                    <div class="meal-item" style="border-color: #f39c12;">
-                        <div class="meal-time"><i class="fas fa-sun"></i> 07:00 صباحاً</div>
-                        <span class="meal-type breakfast">فطور</span>
-                        <p>وجبة الفطور الأساسية: بيض، فول، جبن، زيتون، مربى</p>
-                        <div style="margin-top: 10px; color: #666; font-size: 14px;">
-                            <i class="fas fa-user"></i> سعيد محمد (السائق)
-                            <span style="margin-right: 15px;"></span>
-                            <i class="fas fa-check-circle" style="color: var(--success);"></i> تم التوصيل
-                        </div>
-                    </div>
-                    
-                    <div class="meal-item" style="border-color: #3498db;">
-                        <div class="meal-time"><i class="fas fa-coffee"></i> 10:30 صباحاً</div>
-                        <span class="meal-type snack">وجبة خفيفة</span>
-                        <p>قهوة عربية مع تمر وقهوة - استراحة قصيرة</p>
-                        <div style="margin-top: 10px; color: #666; font-size: 14px;">
-                            <i class="fas fa-clock" style="color: var(--warning);"></i> بعد 45 دقيقة
-                        </div>
-                    </div>
-                    
-                    <div class="meal-item" style="border-color: #e74c3c;">
-                        <div class="meal-time"><i class="fas fa-sun"></i> 01:30 ظهراً</div>
-                        <span class="meal-type lunch">غداء</span>
-                        <p>وجبة الغداء: أرز مع دجاج، سلطة، خضار مطبوخة</p>
-                        <div style="margin-top: 10px; color: #666; font-size: 14px;">
-                            <i class="fas fa-map-marker-alt"></i> استراحة الرياض
-                        </div>
-                    </div>
-                    
-                    <div class="meal-item" style="border-color: #9b59b6;">
-                        <div class="meal-time"><i class="fas fa-moon"></i> 08:30 مساءً</div>
-                        <span class="meal-type dinner">عشاء</span>
-                        <p>وجبة العشاء: شوربة، سمك مشوي، أرز، سلطة</p>
-                        <div style="margin-top: 10px; color: #666; font-size: 14px;">
-                            <i class="fas fa-bell" style="color: var(--warning);"></i> سيتم التنبيه قبل 30 دقيقة
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- نظام الساعة التفاعلية -->
-            <section class="trip-clock">
-                <div class="clock-header">
-                    <h2><i class="fas fa-stopwatch"></i> ساعة الرحلة التفاعلية</h2>
-                    <p>متابعة حية لوقت الرحلة المتبقي</p>
-                </div>
-                
-                <div class="clock-display" id="journeyClock">18:22:45</div>
-                
-                <div class="clock-info">
-                    <div class="clock-item">
-                        <div class="label">وقت المغادرة</div>
-                        <div class="value" id="departureTime">06:00</div>
-                    </div>
-                    <div class="clock-item">
-                        <div class="label">الوقت المنقضي</div>
-                        <div class="value" id="elapsedTime">05:38</div>
-                    </div>
-                    <div class="clock-item">
-                        <div class="label">وقت الوصول المتوقع</div>
-                        <div class="value" id="arrivalTime">00:22</div>
-                    </div>
-                    <div class="clock-item">
-                        <div class="label">متوسط السرعة</div>
-                        <div class="value" id="avgSpeed">85 كم/س</div>
-                    </div>
-                </div>
-                
-                <!-- محاكاة الوقت -->
-                <div class="time-simulator">
-                    <h3><i class="fas fa-fast-forward"></i> محاكاة التقدم الزمني</h3>
-                    <div class="simulator-controls">
-                        <button class="simulator-btn" onclick="simulateTime(-60)">↶ رجوع ساعة</button>
-                        <button class="simulator-btn" onclick="simulateTime(-30)">↶ رجوع 30 دقيقة</button>
-                        <button class="simulator-btn" onclick="simulateTime(-15)">↶ رجوع 15 دقيقة</button>
-                        <button class="simulator-btn" onclick="resetTime()"><i class="fas fa-redo"></i> إعادة تعيين</button>
-                        <button class="simulator-btn" onclick="simulateTime(15)">تقديم 15 دقيقة ↷</button>
-                        <button class="simulator-btn" onclick="simulateTime(30)">تقديم 30 دقيقة ↷</button>
-                        <button class="simulator-btn" onclick="simulateTime(60)">تقديم ساعة ↷</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- نظام التتبع الحي -->
-            <section class="live-tracking">
-                <div class="section-header">
-                    <h2><i class="fas fa-satellite"></i> التتبع الحي للحافلة</h2>
-                    <div>
-                        <span style="color: var(--success); margin-left: 15px;">
-                            <i class="fas fa-circle" style="font-size: 10px;"></i> اتصال مباشر
-                        </span>
-                        <span style="color: var(--primary); margin-right: 15px;">
-                            <i class="fas fa-wifi"></i> قوة الإشارة: 92%
-                        </span>
-                    </div>
-                </div>
-                
-                <div id="trackingMap"></div>
-                
-                <div class="tracking-controls">
-                    <button class="btn btn-primary" onclick="zoomIn()"><i class="fas fa-search-plus"></i> تكبير</button>
-                    <button class="btn btn-secondary" onclick="zoomOut()"><i class="fas fa-search-minus"></i> تصغير</button>
-                    <button class="btn btn-primary" onclick="centerMap()"><i class="fas fa-crosshairs"></i> مركزة على الحافلة</button>
-                    <button class="btn btn-secondary" onclick="showRoute()"><i class="fas fa-route"></i> عرض المسار الكامل</button>
-                    <div style="margin-right: auto; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-location-dot" style="color: var(--primary);"></i>
-                        <span id="currentLocation">الرياض - الطريق السريع</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- التنبيهات المهمة -->
-            <section class="notifications-panel">
-                <div class="section-header">
-                    <h2><i class="fas fa-bell"></i> التنبيهات المهمة</h2>
-                    <span class="badge" style="background: var(--primary); color: white; padding: 5px 15px; border-radius: 20px;">5 جديد</span>
-                </div>
-                
-                <div class="notification-list">
-                    <div class="notification-item food">
-                        <div class="notification-icon"><i class="fas fa-utensils"></i></div>
-                        <div>
-                            <strong>موعد الوجبة التالية: 10:30</strong>
-                            <p>وجبة خفيفة - استراحة القهوة</p>
-                            <small>بعد 45 دقيقة</small>
-                        </div>
-                    </div>
-                    
-                    <div class="notification-item warning">
-                        <div class="notification-icon"><i class="fas fa-gas-pump"></i></div>
-                        <div>
-                            <strong>مستوى الوقود: 35%</strong>
-                            <p>يوصى بالتزود بالوقود في المحطة القادمة</p>
-                            <small>محطة وقود بعد 15 كم</small>
-                        </div>
-                    </div>
-                    
-                    <div class="notification-item info">
-                        <div class="notification-icon"><i class="fas fa-map-marker-alt"></i></div>
-                        <div>
-                            <strong>نقطة تفتيش قادمة</strong>
-                            <p>نقطة تفتيش المرور - مستندات السيارة</p>
-                            <small>بعد 8 كم</small>
-                        </div>
-                    </div>
-                    
-                    <div class="notification-item success">
-                        <div class="notification-icon"><i class="fas fa-weather"></i></div>
-                        <div>
-                            <strong>حالة الطقس: جيد</strong>
-                            <p>درجة الحرارة: 28°C - رؤية واضحة</p>
-                            <small>مناسب للقيادة</small>
-                        </div>
-                    </div>
-                    
-                    <div class="notification-item info">
-                        <div class="notification-icon"><i class="fas fa-users"></i></div>
-                        <div>
-                            <strong>تغيير السائق</strong>
-                            <p>تغيير السائق في المحطة القادمة</p>
-                            <small>بعد ساعتين</small>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- توقيت الرحلة التفصيلي -->
-            <section class="journey-timing">
-                <div class="section-header">
-                    <h2><i class="fas fa-timeline"></i> الجدول الزمني التفصيلي</h2>
-                    <button class="btn btn-primary" onclick="exportTimeline()"><i class="fas fa-download"></i> تصدير الجدول</button>
-                </div>
-                
-                <div class="timeline">
-                    <div class="timeline-event">
-                        <div class="event-time">06:00</div>
-                        <div class="event-dot departure"></div>
-                        <div class="event-content departure">
-                            <h4>بداية الرحلة</h4>
-                            <p>انطلاق من محطة الرياض الرئيسية</p>
-                            <small><i class="fas fa-user"></i> السائق: سعيد محمد</small>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-event">
-                        <div class="event-time">07:00</div>
-                        <div class="event-dot meal"></div>
-                        <div class="event-content meal">
-                            <h4>وجبة الفطور</h4>
-                            <p>توقف لتناول الفطور في مطعم الطريق</p>
-                            <small><i class="fas fa-clock"></i> المدة: 30 دقيقة</small>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-event">
-                        <div class="event-time">09:00</div>
-                        <div class="event-dot rest"></div>
-                        <div class="event-content rest">
-                            <h4>استراحة قصيرة</h4>
-                            <p>استراحة للصلاة والراحة</p>
-                            <small><i class="fas fa-clock"></i> المدة: 15 دقيقة</small>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-event">
-                        <div class="event-time">13:30</div>
-                        <div class="event-dot meal"></div>
-                        <div class="event-content meal">
-                            <h4>وجبة الغداء</h4>
-                            <p>توقف للغداء في استراحة القصيم</p>
-                            <small><i class="fas fa-clock"></i> المدة: 45 دقيقة</small>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-event">
-                        <div class="event-time">20:00</div>
-                        <div class="event-dot meal"></div>
-                        <div class="event-content meal">
-                            <h4>وجبة العشاء</h4>
-                            <p>توقف للعشاء قرب مدينة حائل</p>
-                            <small><i class="fas fa-clock"></i> المدة: 40 دقيقة</small>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-event">
-                        <div class="event-time">00:22</div>
-                        <div class="event-dot arrival"></div>
-                        <div class="event-content arrival">
-                            <h4>نهاية الرحلة</h4>
-                            <p>الوصول إلى محطة تبوك النهائية</p>
-                            <small><i class="fas fa-flag-checkered"></i> إجمالي المسافة: 1250 كم</small>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // بيانات الرحلة
-        let journeyData = {
-            startTime: new Date('2024-01-15T06:00:00'),
-            endTime: new Date('2024-01-16T00:22:00'),
-            currentTime: new Date('2024-01-15T11:38:00'),
-            totalDistance: 1250,
-            distanceCovered: 245,
-            speed: 85,
-            nextMeal: '10:30'
-        };
-
-        // تحديث التاريخ والوقت
-        function updateDateTime() {
-            const now = journeyData.currentTime;
-            const dateEl = document.getElementById('currentDate');
-            
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            };
-            
-            dateEl.textContent = now.toLocaleDateString('ar-SA', options);
-        }
-
-        // تحديث ساعة الرحلة
-        function updateJourneyClock() {
-            const start = journeyData.startTime;
-            const current = journeyData.currentTime;
-            const end = journeyData.endTime;
-            
-            // الوقت المنقضي
-            const elapsedMs = current - start;
-            const elapsedHours = Math.floor(elapsedMs / (1000 * 60 * 60));
-            const elapsedMinutes = Math.floor((elapsedMs % (1000 * 60 * 60)) / (1000 * 60));
-            
-            // الوقت المتبقي
-            const remainingMs = end - current;
-            const remainingHours = Math.floor(remainingMs / (1000 * 60 * 60));
-            const remainingMinutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
-            const remainingSeconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
-            
-            // تحديث العرض
-            document.getElementById('journeyClock').textContent = 
-                `${remainingHours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-            
-            document.getElementById('elapsedTime').textContent = 
-                `${elapsedHours.toString().padStart(2, '0')}:${elapsedMinutes.toString().padStart(2, '0')}`;
-            
-            document.getElementById('departureTime').textContent = 
-                start.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
-            
-            document.getElementById('arrivalTime').textContent = 
-                end.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
-            
-            // تحديث الإحصائيات
-            document.getElementById('nextMeal').textContent = journeyData.nextMeal;
-            document.getElementById('journeyTime').textContent = 
-                `${remainingHours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}`;
-            document.getElementById('distanceTraveled').textContent = journeyData.distanceCovered;
-            document.getElementById('avgSpeed').textContent = `${journeyData.speed} كم/س`;
-            
-            // تحديث الموقع الحالي
-            updateCurrentLocation();
-        }
-
-        // محاكاة الوقت
-        function simulateTime(minutes) {
-            journeyData.currentTime = new Date(journeyData.currentTime.getTime() + minutes * 60000);
-            updateDateTime();
-            updateJourneyClock();
-            
-            // إشعار بالمحاكاة
-            const direction = minutes > 0 ? 'تقديم' : 'رجوع';
-            showNotification(`تم ${direction} الوقت بمقدار ${Math.abs(minutes)} دقيقة`, 'info');
-        }
-
-        function resetTime() {
-            journeyData.currentTime = new Date('2024-01-15T11:38:00');
-            updateDateTime();
-            updateJourneyClock();
-            showNotification('تم إعادة تعيين الوقت', 'success');
-        }
-
-        // نظام الخريطة
-        let map, busMarker;
-        function initMap() {
-            map = L.map('trackingMap').setView([24.7136, 46.6753], 8);
-            
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-            
-            // إضافة الحافلة
-            const busIcon = L.divIcon({
-                html: '<div style="background: #1a5fb4; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3);">🚌</div>',
-                className: 'bus-icon',
-                iconSize: [40, 40],
-                iconAnchor: [20, 20]
-            });
-            
-            busMarker = L.marker([24.7136, 46.6753], { icon: busIcon }).addTo(map)
-                .bindPopup('الحافلة رقم 245 - السائق: سعيد محمد');
-            
-            // إضافة المسار
-            const route = L.polyline([
-                [24.7136, 46.6753],
-                [25.0, 45.0],
-                [26.0, 44.0],
-                [27.0, 43.0],
-                [28.4, 45.6]
-            ], {
-                color: '#1a5fb4',
-                weight: 4,
-                opacity: 0.7,
-                dashArray: '10, 10'
-            }).addTo(map);
-            
-            // تحديث موقع الحافلة تلقائياً
-            setInterval(() => {
-                const lat = busMarker.getLatLng().lat + (Math.random() - 0.5) * 0.1;
-                const lng = busMarker.getLatLng().lng + (Math.random() - 0.5) * 0.1;
-                busMarker.setLatLng([lat, lng]);
-                map.panTo([lat, lng]);
-            }, 10000);
-        }
-
-        // عناصر تحكم الخريطة
-        function zoomIn() {
-            map.zoomIn();
-        }
-
-        function zoomOut() {
-            map.zoomOut();
-        }
-
-        function centerMap() {
-            map.setView(busMarker.getLatLng(), 12);
-            showNotification('تم التركيز على موقع الحافلة', 'info');
-        }
-
-        function showRoute() {
-            map.setView([26.0, 44.0], 6);
-        }
-
-        function updateCurrentLocation() {
-            const locations = [
-                'الرياض - الطريق السريع',
-                'الخرج - محطة الوقود',
-                'القرينة - نقطة التفتيش',
-                'القصيم - طريق الملك فهد',
-                'حائل - المنطقة الشمالية'
-            ];
-            
-            const progress = (journeyData.currentTime - journeyData.startTime) / 
-                           (journeyData.endTime - journeyData.startTime);
-            const locationIndex = Math.floor(progress * locations.length);
-            
-            document.getElementById('currentLocation').textContent = 
-                locations[Math.min(locationIndex, locations.length - 1)];
-        }
-
-        // نظام التنبيهات
-        function showNotification(message, type = 'info') {
-            const notifications = document.querySelector('.notification-list');
-            const notification = document.createElement('div');
-            
-            const icons = {
-                info: 'info-circle',
-                success: 'check-circle',
-                warning: 'exclamation-triangle',
-                food: 'utensils'
-            };
-            
-            notification.className = `notification-item ${type}`;
-            notification.innerHTML = `
-                <div class="notification-icon"><i class="fas fa-${icons[type]}"></i></div>
-                <div>
-                    <strong>${message}</strong>
-                    <p>${new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}</p>
-                </div>
-            `;
-            
-            notifications.insertBefore(notification, notifications.firstChild);
-            
-            // إزالة بعد 5 ثواني
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                setTimeout(() => notification.remove(), 300);
-            }, 5000);
-        }
-
-        // تصدير الجدول الزمني
-        function exportTimeline() {
-            const data = `
-                الجدول الزمني لرحلة خاتم المرسلين
-                التاريخ: ${new Date().toLocaleDateString('ar-SA')}
-                
-                06:00 - بداية الرحلة من الرياض
-                07:00 - وجبة الفطور (30 دقيقة)
-                09:00 - استراحة قصيرة (15 دقيقة)
-                13:30 - وجبة الغداء (45 دقيقة)
-                20:00 - وجبة العشاء (40 دقيقة)
-                00:22 - الوصول إلى تبوك
-                
-                إجمالي المسافة: 1250 كم
-                متوسط السرعة: 85 كم/س
-                السائق: سعيد محمد
-            `;
-            
-            const blob = new Blob([data], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'جدول-الرحلة.txt';
-            a.click();
-            
-            showNotification('تم تصدير الجدول الزمني بنجاح', 'success');
-        }
-
-        // تبديل المشاهد
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // إزالة النشط من الجميع
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                
-                // إضافة النشط للعنصر المحدد
-                this.classList.add('active');
-                
-                // في تطبيق حقيقي: هنا نغير محتوى العرض الرئيسي
-                const view = this.getAttribute('data-view');
-                showNotification(`تم التبديل إلى ${view}`, 'info');
-            });
-        });
-
-        // تهيئة الصفحة
-        window.addEventListener('DOMContentLoaded', () => {
-            updateDateTime();
-            updateJourneyClock();
-            initMap();
-            
-            // تحديث الوقت كل ثانية
-            setInterval(() => {
-                journeyData.currentTime = new Date(journeyData.currentTime.getTime() + 1000);
-                updateDateTime();
-                updateJourneyClock();
-            }, 1000);
-            
-            // إضافة نقرات للأزرار
-            document.querySelectorAll('.btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
-            
-            console.log('🚀 نظام خاتم المرسلين للرحلات جاهز للعمل!');
-            showNotification('مرحباً بك في نظام إدارة الرحلات الذكي', 'success');
-        });
-
-        // تأثيرات إضافية
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('meal-item')) {
-                e.target.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    e.target.style.transform = '';
-                }, 200);
-            }
-        });
-
-        // تحديث عشوائي للإحصائيات
-        setInterval(() => {
-            const randomChange = Math.floor(Math.random() * 3) - 1;
-            journeyData.distanceCovered += randomChange;
-            journeyData.speed = 80 + Math.floor(Math.random() * 15);
-            
-            if (journeyData.distanceCovered < 0) journeyData.distanceCovered = 0;
-            if (journeyData.distanceCovered > journeyData.totalDistance) 
-                journeyData.distanceCovered = journeyData.totalDistance;
-            
-            document.getElementById('distanceTraveled').textContent = journeyData.distanceCovered;
-            document.getElementById('avgSpeed').textContent = `${journeyData.speed} كم/س`;
-        }, 10000);
-    </script>
-</body>
-</html>
+:root {
+    --primary: #2c3e50;
+    --secondary: #e74c3c;
+    --accent: #f39c12;
+    --success: #27ae60;
+    --info: #3498db;
+    --warning: #f1c40f;
+    --danger: #e74c3c;
+    --light: #ecf0f1;
+    --dark: #2c3e50;
+    --gold: #f1c40f;
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --gradient-success: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    --gradient-gold: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Tajawal', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    color: #333;
+    line-height: 1.8;
+    direction: rtl;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(103, 126, 234, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(241, 196, 15, 0.1) 0%, transparent 50%);
+    z-index: -1;
+}
+
+/* العناصر الطافية */
+.floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.floating-element {
+    position: absolute;
+    font-size: 24px;
+    opacity: 0.1;
+    animation: float 15s infinite linear;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    100% {
+        transform: translate(100vw, 100vh) rotate(360deg);
+    }
+}
+
+/* الهيدر */
+.header {
+    background: var(--gradient-primary);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border-bottom: 3px solid var(--gold);
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.logo-container:hover {
+    transform: translateY(-3px);
+}
+
+.logo-icon {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: var(--secondary);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: var(--gradient-gold);
+    transform: rotate(45deg);
+    animation: shine 3s infinite linear;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.logo-text h1 {
+    font-family: 'El Messiri', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to right, #ffffff, #f1c40f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-text p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin: 5px 0 0;
+    font-weight: 300;
+}
+
+.header-stats {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.stat-item {
+    text-align: center;
+    color: white;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.stat-item .number {
+    font-size: 24px;
+    font-weight: 800;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--gold);
+}
+
+.stat-item .label {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+/* لوحة التحكم */
+.dashboard {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+}
+
+/* القائمة الجانبية */
+.sidebar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.user-profile {
+    text-align: center;
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(52, 152, 219, 0.1);
+    position: relative;
+}
+
+.user-profile::after {
+    content: '✨';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    animation: twinkle 2s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 
+        0 10px 30px rgba(102, 126, 234, 0.3),
+        inset 0 4px 8px rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.user-avatar::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.1) 10px,
+        rgba(255, 255, 255, 0.1) 20px
+    );
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.user-avatar span {
+    position: relative;
+    z-index: 1;
+}
+
+.user-info h3 {
+    margin: 0 0 5px;
+    color: var(--primary);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.user-info p {
+    color: #666;
+    font-size: 14px;
+    margin: 0 0 15px;
+}
+
+.user-rating {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+}
+
+.user-rating i {
+    color: var(--gold);
+    font-size: 16px;
+}
+
+/* أزرار القائمة */
+.menu-items {
+    list-style: none;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border-radius: 15px;
+    color: #555;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid transparent;
+}
+
+.menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.menu-item:hover::before {
+    transform: translateX(100%);
+}
+
+.menu-item:hover {
+    transform: translateX(-10px) translateY(-3px);
+    color: white;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    border-color: transparent;
+}
+
+.menu-item.active {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 
+        0 10px 25px rgba(102, 126, 234, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.menu-item i {
+    font-size: 20px;
+    width: 24px;
+    text-align: center;
+}
+
+.menu-item .badge {
+    margin-right: auto;
+    background: var(--gradient-success);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    animation: badgePulse 2s infinite;
+}
+
+@keyframes badgePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* الأزرار الرئيسية */
+.btn {
+    padding: 16px 32px;
+    border-radius: 15px;
+    border: none;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform-style: preserve-3d;
+    perspective: 500px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s;
+}
+
+.btn:hover::before {
+    transform: translateX(100%);
+}
+
+.btn:hover {
+    transform: translateY(-5px) rotateX(10deg);
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.25),
+        0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active {
+    transform: translateY(-2px) scale(0.98);
+    transition: all 0.1s;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary {
+    background: var(--gradient-secondary);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-success {
+    background: var(--gradient-success);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-warning {
+    background: var(--gradient-gold);
+    color: #2c3e50;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-info {
+    background: var(--gradient-accent);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-icon {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.btn-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+/* الكروت */
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s ease;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.card.full-width {
+    grid-column: 1 / -1;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(52, 152, 219, 0.1);
+}
+
+.card-title {
+    font-family: 'El Messiri', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-title i {
+    color: var(--secondary);
+    font-size: 28px;
+}
+
+/* الشبكة الرئيسية */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+/* إحصائيات حية */
+.live-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gradient-primary);
+}
+
+.stat-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: white;
+    background: var(--gradient-primary);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.stat-value {
+    font-size: 42px;
+    font-weight: 800;
+    margin: 10px 0;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* نموذج البحث */
+.search-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    padding: 40px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.search-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: var(--gradient-gold);
+    border-radius: 50%;
+    transform: translate(150px, -150px);
+    opacity: 0.1;
+}
+
+.search-title {
+    font-family: 'El Messiri', sans-serif;
+    font-size: 28px;
+    color: var(--primary);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-group label i {
+    color: var(--secondary);
+}
+
+.form-control {
+    width: 100%;
+    padding: 18px 20px;
+    border: 2px solid #e0e6ed;
+    border-radius: 15px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+    transform: translateY(-2px);
+}
+
+/* أزرار الإجراءات */
+.action-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.main-actions {
+    margin-top: 40px;
+}
+
+/* محتوى الكروت */
+.meal-list {
+    margin-top: 20px;
+}
+
+.meal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.meal-item:last-child {
+    border-bottom: none;
+}
+
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-success {
+    background: var(--gradient-success);
+    color: white;
+}
+
+.badge-warning {
+    background: var(--gradient-gold);
+    color: #2c3e50;
+}
+
+.badge-secondary {
+    background: var(--gradient-secondary);
+    color: white;
+}
+
+.clock-display {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.journey-clock {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+}
+
+.clock-label {
+    color: #666;
+    font-size: 14px;
+}
+
+/* قائمة التنبيهات */
+.notification-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    background: rgba(52, 152, 219, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.notification-item.fuel-notification {
+    background: rgba(52, 152, 219, 0.1);
+}
+
+.notification-item.meal-notification {
+    background: rgba(243, 156, 18, 0.1);
+}
+
+.notification-item.checkpoint-notification {
+    background: rgba(231, 76, 60, 0.1);
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.notification-item.fuel-notification .notification-icon {
+    background: var(--info);
+}
+
+.notification-item.meal-notification .notification-icon {
+    background: var(--warning);
+}
+
+.notification-item.checkpoint-notification .notification-icon {
+    background: var(--danger);
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-content strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.notification-content p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.notification-content small {
+    color: #666;
+    font-size: 12px;
+}
+
+/* الخريطة */
+#trackingMap {
+    height: 400px;
+    border-radius: 15px;
+    margin: 20px 0;
+    border: 3px solid var(--light);
+    z-index: 1;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--success);
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--success);
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.status-indicator.connected {
+    background: var(--success);
+}
+
+.tracking-controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.current-location {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* شريط التقدم */
+.progress-container {
+    margin: 20px 0;
+}
+
+.progress-bar {
+    height: 12px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-success);
+    border-radius: 6px;
+    width: 0%;
+    transition: width 1s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* التذييل */
+.footer {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 60px 0 30px;
+    margin-top: 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gradient-gold);
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+.footer-section h3 {
+    font-family: 'El Messiri', sans-serif;
+    font-size: 22px;
+    margin-bottom: 25px;
+    color: var(--gold);
+}
+
+.footer-section p {
+    opacity: 0.9;
+    line-height: 1.8;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-links a:hover {
+    color: var(--gold);
+    transform: translateX(-5px);
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-links a {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: var(--gold);
+    transform: translateY(-5px);
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.developer-credit {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+/* تصميم متجاوب */
+@media (max-width: 1200px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        position: static;
+    }
+    
+    .header-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .header-stats {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .stat-item {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .live-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .search-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text h1 {
+        font-size: 24px;
+    }
+    
+    .card-title {
+        font-size: 20px;
+    }
+    
+    .stat-value {
+        font-size: 32px;
+    }
+    
+    .menu-item {
+        padding: 15px;
+        font-size: 14px;
+    }
+    
+    .btn {
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+    
+    .journey-clock {
+        font-size: 36px;
+    }
+}

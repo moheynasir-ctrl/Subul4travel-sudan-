@@ -1,3 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سُبُل - منصة العودة الطوعية للسودان</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">سُبُل</a>
+            <ul class="nav-links">
+                <li><a href="#"><i class="fas fa-home"></i> الرئيسية</a></li>
+                <li><a href="#"><i class="fas fa-bus"></i> الرحلات</a></li>
+                <li><a href="#"><i class="fas fa-info-circle"></i> عن المنصة</a></li>
+                <li><a href="#"><i class="fas fa-user"></i> حسابي</a></li>
+            </ul>
+            <a href="#" class="btn btn-login">تسجيل الدخول</a>
+        </div>
+    </nav>
+
+    <!-- قسم البحث -->
+    <section class="hero">
+        <div class="container">
+            <h1>طريقك الآمن للعودة إلى الديار</h1>
+            <p class="subtitle">احجز رحلتك إلى السودان بسهولة واطمئنان. اعرف مسار الرحلة وأوقاتها وأماكن الاستراحة.</p>
+            
+            <div class="search-box">
+                <div class="input-group">
+                    <label for="from"><i class="fas fa-map-marker-alt"></i> من</label>
+                    <input type="text" id="from" placeholder="مدينة المغادرة">
+                </div>
+                <div class="input-group">
+                    <label for="to"><i class="fas fa-flag"></i> إلى</label>
+                    <input type="text" id="to" value="السودان" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="date"><i class="fas fa-calendar-alt"></i> تاريخ السفر</label>
+                    <input type="date" id="date">
+                </div>
+                <div class="input-group">
+                    <label for="passengers"><i class="fas fa-users"></i> عدد المسافرين</label>
+                    <input type="number" id="passengers" min="1" value="1">
+                </div>
+                <button class="btn btn-primary btn-search"><i class="fas fa-search"></i> ابحث عن رحلات</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم عرض الرحلات -->
+    <section class="trips">
+        <div class="container">
+            <h2>رحلات متاحة</h2>
+            <div class="trip-list" id="tripList">
+                <!-- هنا سيتم عرض الرحلات بواسطة JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- المميزات -->
+    <section class="features">
+        <div class="container">
+            <h2>لماذا تختار سُبُل؟</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>آمن وموثوق</h3>
+                    <p>شركاؤنا من أفضل شركات النقل الموثوقة</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>تتبع مباشر</h3>
+                    <p>تتبع موقع الحافلة في الوقت الحقيقي</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-credit-card"></i>
+                    <h3>دفع آمن</h3>
+                    <p>خيارات دفع متنوعة ومشفرة</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>دعم على مدار الساعة</h3>
+                    <p>فريق الدعم جاهز لمساعدتك في أي وقت</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>سُبُل</h3>
+                    <p>منصة العودة الطوعية للسودان. نسهل طريق العودة بأمان وثقة.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="#">الرئيسية</a></li>
+                        <li><a href="#">الرحلات</a></li>
+                        <li><a href="#">عن المنصة</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>اتصل بنا</h3>
+                    <p><i class="fas fa-phone"></i> +123456789</p>
+                    <p><i class="fas fa-envelope"></i> info@subul.com</p>
+                </div>
+            </div>
+            <p class="copyright">© 2023 سُبُل. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>

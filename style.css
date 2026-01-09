@@ -1,1 +1,616 @@
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Cairo',sans-serif;background:#f8f9fa;color:#333;line-height:1.6;direction:rtl}.container{width:90%;max-width:1200px;margin:0 auto;padding:0 15px}.btn{display:inline-block;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;cursor:pointer;border:none;font-size:16px;transition:all .3s}.btn-login{background:#f8f9fa;color:#2e7d32;border:2px solid #2e7d32}.btn-login:hover{background:#2e7d32;color:white}.btn-primary{background:#2e7d32;color:white}.btn-primary:hover{background:#1b5e20;transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,.2)}.navbar{background:white;box-shadow:0 2px 10px rgba(0,0,0,.1);position:sticky;top:0;z-index:1000;padding:15px 0}.navbar .container{display:flex;justify-content:space-between;align-items:center}.logo{font-size:28px;font-weight:700;color:#2e7d32;text-decoration:none}.nav-links{display:flex;list-style:none;gap:30px}.nav-links a{text-decoration:none;color:#555;font-weight:600;display:flex;align-items:center;gap:8px;transition:color .3s}.nav-links a:hover{color:#2e7d32}.hero{background:linear-gradient(rgba(46,125,50,.9),rgba(27,94,32,.9));color:white;padding:80px 0;text-align:center;border-radius:0 0 20px 20px}.hero h1{font-size:42px;margin-bottom:20px}.subtitle{font-size:18px;margin-bottom:40px;max-width:800px;margin:0 auto}.search-box{background:white;border-radius:15px;padding:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;box-shadow:0 10px 30px rgba(0,0,0,.2);max-width:1000px;margin:40px auto}.input-group{display:flex;flex-direction:column}.input-group label{color:#2e7d32;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:5px}.input-group input{padding:12px 15px;border:2px solid #ddd;border-radius:8px;font-size:16px;transition:border-color .3s}.input-group input:focus{outline:none;border-color:#2e7d32}.btn-search{grid-column:1/-1;padding:15px;font-size:18px;margin-top:10px}.trips{padding:80px 0}.trips h2{text-align:center;color:#2e7d32;font-size:36px;margin-bottom:40px}.trip-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(350px,1fr));gap:25px}.trip-card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,.1);transition:transform .3s,box-shadow .3s}.trip-card:hover{transform:translateY(-10px);box-shadow:0 15px 30px rgba(0,0,0,.15)}.trip-header{padding:20px;background:#2e7d32;color:white;display:flex;justify-content:space-between;align-items:center}.company-info{display:flex;align-items:center;gap:10px}.company-logo{width:40px;height:40px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#2e7d32;font-weight:bold}.trip-body{padding:20px}.route-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid #eee}.route-from,.route-to{text-align:center}.route-time{font-size:24px;font-weight:700;color:#2e7d32}.route-city{color:#666;font-size:14px}.trip-details{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:20px}.detail-item{display:flex;align-items:center;gap:8px;color:#555}.detail-item i{color:#2e7d32}.trip-price{background:#f8f9fa;padding:15px;border-radius:10px;text-align:center}.price{font-size:28px;font-weight:700;color:#2e7d32}.trip-footer{padding:0 20px 20px}.btn-book{width:100%;padding:12px}.features{background:#f1f8e9;padding:80px 0}.features h2{text-align:center;color:#2e7d32;font-size:36px;margin-bottom:50px}.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px}.feature-card{background:white;padding:30px;border-radius:15px;text-align:center;box-shadow:0 5px 15px rgba(0,0,0,.05);transition:transform .3s}.feature-card:hover{transform:translateY(-5px)}.feature-card i{font-size:48px;color:#2e7d32;margin-bottom:20px}.feature-card h3{margin-bottom:15px;color:#333}.footer{background:#1b5e20;color:white;padding:60px 0 30px}.footer-content{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:40px;margin-bottom:40px}.footer-section h3{font-size:22px;margin-bottom:20px;color:#fff}.footer-section ul{list-style:none}.footer-section ul li{margin-bottom:10px}.footer-section a{color:#ddd;text-decoration:none;transition:color .3s}.footer-section a:hover{color:white}.footer-section p{display:flex;align-items:center;gap:10px;margin-bottom:10px}.copyright{text-align:center;padding-top:30px;border-top:1px solid rgba(255,255,255,.1);color:#ddd;font-size:14px}.rating{display:flex;align-items:center;gap:5px;font-size:14px}.bus-type{background:rgba(255,255,255,.2);padding:5px 10px;border-radius:20px;font-size:14px}.route-arrow{display:flex;flex-direction:column;align-items:center;gap:5px}.seats-bar{width:100px;height:8px;background:#eee;border-radius:4px;overflow:hidden;margin-right:10px}.seats-fill{height:100%;transition:width .3s}.duration{font-size:12px;color:#666}@media (max-width:768px){.navbar .container{flex-direction:column;gap:20px}.nav-links{flex-wrap:wrap;justify-content:center}.hero h1{font-size:32px}.search-box{grid-template-columns:1fr}.trip-list{grid-template-columns:1fr}.trip-details{grid-template-columns:1fr}.features-grid{grid-template-columns:1fr}}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خاتم المرسلين للشحن</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5fb4;
+            --secondary: #2d8c4a;
+            --accent: #ffd700;
+            --dark: #0d3b66;
+            --light: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* التصميم الأساسي للوقو */
+        .logo-main {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(26, 95, 180, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .logo-main::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 23px;
+            z-index: -1;
+            animation: borderRotate 3s linear infinite;
+        }
+
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo-main:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(26, 95, 180, 0.25);
+        }
+
+        /* شعار النخلة والجمل */
+        .logo-symbol {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+        }
+
+        .palm-tree {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            color: var(--secondary);
+            z-index: 2;
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            25% { transform: translateX(-50%) rotate(5deg); }
+            75% { transform: translateX(-50%) rotate(-5deg); }
+        }
+
+        .camel {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 50px;
+            color: #8b4513;
+            z-index: 1;
+            animation: camelWalk 6s ease-in-out infinite;
+        }
+
+        @keyframes camelWalk {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .sun {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            color: var(--accent);
+            animation: sunRotate 10s linear infinite;
+        }
+
+        @keyframes sunRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* النص الرئيسي */
+        .logo-text {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .main-name {
+            font-family: 'Amiri', serif;
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.3;
+            margin-bottom: 5px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .main-name::after {
+            content: 'ﷺ';
+            position: absolute;
+            top: -15px;
+            right: -25px;
+            font-size: 24px;
+            color: var(--accent);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            animation: prayerPulse 2s infinite;
+        }
+
+        @keyframes prayerPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .subtitle {
+            font-size: 22px;
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .subtitle::before,
+        .subtitle::after {
+            content: '✈️';
+            margin: 0 10px;
+            font-size: 18px;
+            animation: planeFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes planeFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(10deg); }
+        }
+
+        /* الشعار الإضافي */
+        .seal-badge {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(26, 95, 180, 0.3);
+            animation: badgePulse 3s infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* العناصر المتحركة */
+        .moving-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        .dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100%) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100%) translateX(20px);
+                opacity: 0;
+            }
+        }
+
+        /* الإصدارات المختلفة */
+        .logo-variants {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+        }
+
+        .logo-variant {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .logo-variant:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(26, 95, 180, 0.2);
+        }
+
+        .variant-1 .icon {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        .variant-2 .icon {
+            font-size: 40px;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            animation: spin 4s linear infinite;
+        }
+
+        .variant-3 .icon {
+            font-size: 40px;
+            color: var(--accent);
+            margin-bottom: 15px;
+            animation: shake 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
+        }
+
+        /* معلومات عن الشعار */
+        .logo-info {
+            background: linear-gradient(135deg, var(--light), white);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-right: 5px solid var(--primary);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .logo-info h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(26, 95, 180, 0.05);
+            border-radius: 10px;
+        }
+
+        .info-item i {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        /* التحميل */
+        .download-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(26, 95, 180, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(26, 95, 180, 0.4);
+            gap: 15px;
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            .main-name {
+                font-size: 32px;
+            }
+            
+            .subtitle {
+                font-size: 18px;
+            }
+            
+            .logo-variants {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo-symbol {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .palm-tree {
+                font-size: 30px;
+            }
+            
+            .camel {
+                font-size: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-name {
+                font-size: 28px;
+            }
+            
+            .logo-main {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <!-- الشعار الرئيسي -->
+        <div class="logo-main">
+            <div class="moving-dots" id="movingDots"></div>
+            
+            <div class="logo-symbol">
+                <div class="palm-tree">🌴</div>
+                <div class="camel">🐪</div>
+                <div class="sun">☀️</div>
+            </div>
+            
+            <div class="logo-text">
+                <h1 class="main-name">خاتم المرسلين</h1>
+                <h2 class="subtitle">خدمات الشحن والنقل</h2>
+                <div class="seal-badge">
+                    <i class="fas fa-shipping-fast"></i>
+                    <span>شحن موثوق في كل وقت</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- إصدارات مختلفة -->
+        <div class="logo-variants">
+            <div class="logo-variant variant-1" onclick="selectVariant(1)">
+                <div class="icon">🚚</div>
+                <h3>الإصدار المبسط</h3>
+                <p>خاتم المرسلين للشحن</p>
+            </div>
+            
+            <div class="logo-variant variant-2" onclick="selectVariant(2)">
+                <div class="icon">📦</div>
+                <h3>الإصدار الاحترافي</h3>
+                <p>خاتم المرسلين | خدمات لوجستية</p>
+            </div>
+            
+            <div class="logo-variant variant-3" onclick="selectVariant(3)">
+                <div class="icon">⚡</div>
+                <h3>الإصدار السريع</h3>
+                <p>خاتم المرسلين | شحن سريع</p>
+            </div>
+        </div>
+
+        <!-- معلومات عن الشعار -->
+        <div class="logo-info">
+            <h3><i class="fas fa-info-circle"></i> معلومات عن الشعار</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <i class="fas fa-palette"></i>
+                    <div>
+                        <strong>الألوان:</strong>
+                        <div style="display: flex; gap: 5px; margin-top: 5px;">
+                            <div style="width: 20px; height: 20px; background: #1a5fb4; border-radius: 4px;"></div>
+                            <div style="width: 20px; height: 20px; background: #2d8c4a; border-radius: 4px;"></div>
+                            <div style="width: 20px; height: 20px; background: #ffd700; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fas fa-symbols"></i>
+                    <div>
+                        <strong>الرموز:</strong>
+                        <div>نخلة، جمل، شمس</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>وقت التوصيل:</strong>
+                        <div>24-48 ساعة</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="fas fa-globe"></i>
+                    <div>
+                        <strong>التغطية:</strong>
+                        <div>جميع المدن</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- التحميل -->
+        <div class="download-section">
+            <a href="#" class="download-btn" onclick="downloadLogo()">
+                <i class="fas fa-download"></i>
+                تحميل الشعار
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // إنشاء النقاط المتحركة
+        function createMovingDots() {
+            const container = document.getElementById('movingDots');
+            for (let i = 0; i < 15; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dot.style.left = `${Math.random() * 100}%`;
+                dot.style.animationDelay = `${Math.random() * 6}s`;
+                container.appendChild(dot);
+            }
+        }
+
+        // اختيار نسخة الشعار
+        function selectVariant(variant) {
+            const variants = document.querySelectorAll('.logo-variant');
+            variants.forEach(v => v.style.borderColor = 'transparent');
+            
+            const selected = document.querySelector(`.variant-${variant}`);
+            selected.style.borderColor = '#1a5fb4';
+            
+            // تغيير الشعار الرئيسي حسب النسخة المختارة
+            const mainName = document.querySelector('.main-name');
+            const subtitle = document.querySelector('.subtitle');
+            const badge = document.querySelector('.seal-badge span');
+            
+            switch(variant) {
+                case 1:
+                    subtitle.textContent = 'خدمات الشحن والنقل';
+                    badge.textContent = 'شحن موثوق في كل وقت';
+                    break;
+                case 2:
+                    subtitle.textContent = 'خدمات لوجستية متكاملة';
+                    badge.textContent = 'حلول لوجستية ذكية';
+                    break;
+                case 3:
+                    subtitle.textContent = 'شحن سريع وآمن';
+                    badge.textContent = 'توصيل في نفس اليوم';
+                    break;
+            }
+            
+            // تأثير عند الاختيار
+            selected.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                selected.style.transform = 'translateY(-5px)';
+            }, 300);
+        }
+
+        // تحميل الشعار
+        function downloadLogo() {
+            alert('سيتم تحميل الشعار بجودة عالية (PNG, SVG)\n\nيمكنك حفظ الصفحة كاملة أو استخدام زر Print Screen للحصول على الشعار.');
+            
+            // في التطبيق الحقيقي، هنا سيكون رابط تحميل الملفات
+            // window.open('logo.png', '_blank');
+        }
+
+        // تأثيرات إضافية
+        function addHoverEffects() {
+            const logoMain = document.querySelector('.logo-main');
+            const camel = document.querySelector('.camel');
+            const palm = document.querySelector('.palm-tree');
+            
+            logoMain.addEventListener('mouseenter', () => {
+                camel.style.animation = 'camelWalk 2s ease-in-out infinite';
+                palm.style.animation = 'sway 2s ease-in-out infinite';
+            });
+            
+            logoMain.addEventListener('mouseleave', () => {
+                camel.style.animation = 'camelWalk 6s ease-in-out infinite';
+                palm.style.animation = 'sway 4s ease-in-out infinite';
+            });
+        }
+
+        // تهيئة الشعار
+        window.addEventListener('DOMContentLoaded', () => {
+            createMovingDots();
+            addHoverEffects();
+            
+            // اختيار النسخة الأولى افتراضياً
+            selectVariant(1);
+            
+            // عرض رسالة ترحيبية
+            setTimeout(() => {
+                console.log('🎉 شعار "خاتم المرسلين للشحن" جاهز!');
+                console.log('🚚 خدمة شحن موثوقة - ⏱️ توصيل سريع - 📦 تغليف آمن');
+            }, 1000);
+        });
+
+        // تأثيرات النقاط المتحركة المستمرة
+        setInterval(() => {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach(dot => {
+                if (Math.random() > 0.7) {
+                    dot.style.background = ['#1a5fb4', '#2d8c4a', '#ffd700'][Math.floor(Math.random() * 3)];
+                }
+            });
+        }, 2000);
+    </script>
+</body>
+</html>

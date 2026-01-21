@@ -1,451 +1,5 @@
-<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚌 منصة سبل  - رحلات مصر إلى السودان</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-</head>
-<body>
-    <!-- العناصر الطافية -->
-    <div class="floating-elements">
-        <div class="floating-element" style="top: 10%; left: 5%;">🚌</div>
-        <div class="floating-element" style="top: 20%; right: 10%;">🧳</div>
-        <div class="floating-element" style="bottom: 30%; left: 15%;">⚡</div>
-        <div class="floating-element" style="bottom: 20%; right: 5%;">🇪🇬→🇸🇩</div>
-        <div class="floating-element" style="top: 50%; left: 20%;">✨</div>
-    </div>
-
-    <!-- الهيدر المطور -->
-    <header class="header">
-        <div class="header-content">
-            <a href="#" class="logo-container">
-                <div class="logo-icon">
-                    <i class="fas fa-bus-alt"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>سبل لخدمات الترحيل
-                    <p>🇪🇬 مصر ← 🇸🇩 السودان | رحلة آمنة مضمونة</p>
-                </div>
-            </a>
-            
-            <div class="header-stats">
-                <div class="stat-item">
-                    <span class="number" id="activeTripsCount">18</span>
-                    <span class="label">رحلة نشطة</span>
-                </div>
-                <div class="stat-item">
-                    <span class="number" id="successRate">99%</span>
-                    <span class="label">وصول آمن</span>
-                </div>
-                <div class="stat-item">
-                    <span class="number">24/7</span>
-                    <span class="label">دعم على الطريق</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- لوحة التحكم -->
-    <div class="dashboard">
-        <!-- القائمة الجانبية -->
-        <aside class="sidebar">
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <span>🇸🇩📍</span>
-                </div>
-                <div class="user-info">
-                    <h3>تم انشائه بواسطه مطور:moheydevoloper </h3>
-                    <p>(مدير التصميم) </p>
-                    <div class="route-badge">
-                        <span>مصر ← السودان</span>
-                    </div>
-                </div>
-            </div>
-
-            <ul class="menu-items">
-                <li><a href="#" class="menu-item active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i>لوحة الرحلة<span class="badge">3</span></a></li>
-                <li><a href="#" class="menu-item" data-section="active-trips"><i class="fas fa-bus"></i>رحلاتي النشطة</a></li>
-                <li><a href="#" class="menu-item" data-section="tracking"><i class="fas fa-map-marked-alt"></i>تتبع الرحلة الحي</a></li>
-                <li><a href="#" class="menu-item" data-section="meals"><i class="fas fa-utensils"></i>مواعيد الأكل</a></li>
-                <li><a href="#" class="menu-item" data-section="border-crossing"><i class="fas fa-passport"></i>عبور الحدود</a></li>
-                <li><a href="#" class="menu-item" data-section="documents"><i class="fas fa-file-alt"></i>مستندات السفر</a></li>
-                <li><a href="#" class="menu-item" data-section="rest-stops"><i class="fas fa-map-marker-alt"></i>محطات الراحة</a></li>
-                <li><a href="#" class="menu-item" data-section="emergency"><i class="fas fa-phone-alt"></i>الاتصال الطارئ</a></li>
-                <li><a href="#" class="menu-item" data-section="settings"><i class="fas fa-cogs"></i>إعدادات الرحلة</a></li>
-            </ul>
-
-            <div class="country-info">
-                <div class="country-flag">
-                    <span>🇪🇬</span>
-                    <div class="country-name">مصر</div>
-                </div>
-                <div class="route-arrow">
-                    <i class="fas fa-long-arrow-alt-right"></i>
-                </div>
-                <div class="country-flag">
-                    <span>🇸🇩</span>
-                    <div class="country-name">السودان</div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- المحتوى الرئيسي -->
-        <main class="main-content">
-            <!-- إحصائيات الرحلة -->
-            <div class="live-stats">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-road"></i></div>
-                    <div class="stat-value" id="distanceTraveled">1,250</div>
-                    <div class="stat-label">كم المقطوعة</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                    <div class="stat-value" id="remainingTime">18:22</div>
-                    <div class="stat-label">متبقي للوصول</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-utensils"></i></div>
-                    <div class="stat-value" id="nextMealTime">02:30</div>
-                    <div class="stat-label">الوجبة التالية</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-border-none"></i></div>
-                    <div class="stat-value" id="borderDistance">85</div>
-                    <div class="stat-label">كم للحدود</div>
-                </div>
-            </div>
-
-            <!-- نموذج حجز الرحلة -->
-            <div class="search-container">
-                <h2 class="search-title"><i class="fas fa-route"></i>احجز رحلتك من مصر إلى السودان</h2>
-                <div class="search-grid">
-                    <div class="input-group">
-                        <label><i class="fas fa-map-marker-alt"></i>المغادرة من مصر</label>
-                        <select class="form-control" id="fromEgypt">
-                            <option value="">اختر مدينة المغادرة</option>
-                            <option value="cairo">القاهرة 🏙️</option>
-                            <option value="alexandria">الإسكندرية 🌊</option>
-                            <option value="aswan">أسوان ☀️</option>
-                            <option value="luxor">الأقصر 🏛️</option>
-                            <option value="hurghada">الغردقة 🐠</option>
-                            <option value="sharm">شرم الشيخ 🏖️</option>
-                            <option value="portsaid">بورسعيد 🚢</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label><i class="fas fa-flag"></i>الوصول إلى السودان</label>
-                        <select class="form-control" id="toSudan">
-                            <option value="">اختر مدينة الوصول</option>
-                            <option value="khartoum">الخرطوم 🌴</option>
-                            <option value="portsudan">بورتسودان 🚢</option>
-                            <option value="nyala">نيالا 🏜️</option>
-                            <option value="kasala">كسلا ⛰️</option>
-                            <option value="wadmadani">ود مدني 🌾</option>
-                            <option value="alobied">الأبيض 🕌</option>
-                            <option value="dongola">دنقلا 🌅</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label><i class="fas fa-calendar"></i>تاريخ السفر</label>
-                        <input type="date" class="form-control" id="travelDate">
-                    </div>
-                    <div class="input-group">
-                        <label><i class="fas fa-users"></i>عدد المسافرين</label>
-                        <div class="passenger-selector">
-                            <button type="button" class="passenger-btn" onclick="changePassengers(-1)">-</button>
-                            <input type="number" class="form-control" id="passengers" value="1" min="1" max="10">
-                            <button type="button" class="passenger-btn" onclick="changePassengers(1)">+</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="btn btn-primary" id="searchTripBtn"><i class="fas fa-search"></i>ابحث عن رحلة</button>
-                    <button class="btn btn-secondary" id="bookNowBtn"><i class="fas fa-ticket-alt"></i>احجز الآن</button>
-                    <button class="btn btn-success" id="viewScheduleBtn"><i class="fas fa-calendar-alt"></i>المواعيد الأسبوعية</button>
-                </div>
-            </div>
-
-            <!-- الشبكة الرئيسية -->
-            <div class="main-grid">
-                <!-- بطاقة مواعيد الأكل -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-utensils"></i>برنامج وجبات الرحلة</h3>
-                        <button class="btn btn-icon btn-warning" id="addMealBtn"><i class="fas fa-plus"></i></button>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="mealProgress" style="width: 40%;"></div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-                            <span>بداية الرحلة</span>
-                            <span>نهاية الرحلة</span>
-                        </div>
-                    </div>
-                    <div class="meal-list" style="margin-top: 20px;">
-                        <div class="meal-item">
-                            <div class="meal-time">⏰ 07:00 ص</div>
-                            <div class="meal-details">
-                                <strong>فطور في القاهرة</strong>
-                                <p>وجبة فطور كاملة قبل الانطلاق</p>
-                            </div>
-                            <span class="badge badge-success">مكتمل</span>
-                        </div>
-                        <div class="meal-item">
-                            <div class="meal-time">⏰ 13:30 م</div>
-                            <div class="meal-details">
-                                <strong>غداء في أسيوط</strong>
-                                <p>استراحة غداء لمدة 45 دقيقة</p>
-                            </div>
-                            <span class="badge badge-warning">قريب</span>
-                        </div>
-                        <div class="meal-item">
-                            <div class="meal-time">⏰ 20:00 م</div>
-                            <div class="meal-details">
-                                <strong>عشاء في أسوان</strong>
-                                <p>وجبة عشاء قبل عبور الحدود</p>
-                            </div>
-                            <span class="badge badge-secondary">مخطط</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- بطاقة توقيت الرحلة -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-clock"></i>ساعة الرحلة التفاعلية</h3>
-                        <button class="btn btn-icon btn-info" id="refreshClockBtn"><i class="fas fa-sync-alt"></i></button>
-                    </div>
-                    <div class="clock-display">
-                        <div class="journey-clock" id="journeyClock">18:22:45</div>
-                        <div class="clock-label">متبقي حتى الوصول للخرطوم</div>
-                    </div>
-                    <div class="journey-info">
-                        <div class="info-item">
-                            <i class="fas fa-flag"></i>
-                            <span>المغادرة: القاهرة 06:00</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-border-all"></i>
-                            <span>عبور الحدود: بعد 8 ساعات</span>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>الوصول: الخرطوم 00:22</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- بطاقة عبور الحدود -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title"><i class="fas fa-passport"></i>إجراءات عبور الحدود</h3>
-                        <span class="badge badge-warning">هام</span>
-                    </div>
-                    <div class="border-checklist">
-                        <div class="checklist-item checked">
-                            <i class="fas fa-check-circle"></i>
-                            <span>جواز سفر ساري</span>
-                        </div>
-                        <div class="checklist-item checked">
-                            <i class="fas fa-check-circle"></i>
-                            <span>تأشيرة دخول السودان</span>
-                        </div>
-                        <div class="checklist-item">
-                            <i class="fas fa-clock"></i>
-                            <span>شهادة تطعيم دولية</span>
-                        </div>
-                        <div class="checklist-item">
-                            <i class="fas fa-clock"></i>
-                            <span>تصريح المركبة</span>
-                        </div>
-                    </div>
-                    <div class="border-info">
-                        <h4><i class="fas fa-map-pin"></i> معبر أرقين البري</h4>
-                        <p>أشهر معابر العبور بين مصر والسودان، يفتح 24 ساعة</p>
-                        <div class="estimated-time">
-                            <i class="fas fa-clock"></i>
-                            <span>مدة العبور المتوقعة: 2-3 ساعات</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- قسم التتبع الحي -->
-            <div class="card full-width">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-satellite"></i>التتبع الحي للحافلة</h3>
-                    <div class="connection-status">
-                        <span class="status-indicator connected"></span>
-                        <span>اتصال مباشر مع الحافلة</span>
-                        <span class="signal-strength"><i class="fas fa-wifi"></i> قوة الإشارة: 92%</span>
-                    </div>
-                </div>
-                <div id="trackingMap"></div>
-                <div class="tracking-controls">
-                    <button class="btn btn-primary" id="zoomInBtn"><i class="fas fa-search-plus"></i>تكبير</button>
-                    <button class="btn btn-secondary" id="zoomOutBtn"><i class="fas fa-search-minus"></i>تصغير</button>
-                    <button class="btn btn-primary" id="centerMapBtn"><i class="fas fa-crosshairs"></i>مركزة على الحافلة</button>
-                    <button class="btn btn-secondary" id="showRouteBtn"><i class="fas fa-route"></i>عرض المسار الكامل</button>
-                    <div class="current-location">
-                        <i class="fas fa-location-dot"></i>
-                        <span id="currentLocation">محافظة أسيوط - طريق مصر السودان</span>
-                    </div>
-                </div>
-                <div class="route-stops">
-                    <div class="stop active">
-                        <div class="stop-dot"></div>
-                        <div class="stop-info">
-                            <strong>القاهرة</strong>
-                            <small>بداية الرحلة</small>
-                        </div>
-                    </div>
-                    <div class="stop active">
-                        <div class="stop-dot"></div>
-                        <div class="stop-info">
-                            <strong>أسيوط</strong>
-                            <small>استراحة الغداء</small>
-                        </div>
-                    </div>
-                    <div class="stop">
-                        <div class="stop-dot"></div>
-                        <div class="stop-info">
-                            <strong>أسوان</strong>
-                            <small>قبل الحدود</small>
-                        </div>
-                    </div>
-                    <div class="stop">
-                        <div class="stop-dot"></div>
-                        <div class="stop-info">
-                            <strong>معبر أرقين</strong>
-                            <small>عبور الحدود</small>
-                        </div>
-                    </div>
-                    <div class="stop">
-                        <div class="stop-dot"></div>
-                        <div class="stop-info">
-                            <strong>الخرطوم</strong>
-                            <small>نهاية الرحلة</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- محطات الراحة المهمة -->
-            <div class="card full-width">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-map-marker-alt"></i>محطات الراحة على الطريق</h3>
-                    <button class="btn btn-outline"><i class="fas fa-download"></i>تحميل الدليل</button>
-                </div>
-                <div class="rest-stops-grid">
-                    <div class="rest-stop">
-                        <div class="stop-icon"><i class="fas fa-utensils"></i></div>
-                        <div class="stop-details">
-                            <h4>مطعم النيل</h4>
-                            <p>أسيوط - وجبات مصرية تقليدية</p>
-                            <small><i class="fas fa-clock"></i> بعد 3 ساعات</small>
-                        </div>
-                    </div>
-                    <div class="rest-stop">
-                        <div class="stop-icon"><i class="fas fa-gas-pump"></i></div>
-                        <div class="stop-details">
-                            <h4>محطة وقود البترول</h4>
-                            <p>قنا - وقود وخدمات سريعة</p>
-                            <small><i class="fas fa-clock"></i> بعد 5 ساعات</small>
-                        </div>
-                    </div>
-                    <div class="rest-stop">
-                        <div class="stop-icon"><i class="fas fa-bed"></i></div>
-                        <div class="stop-details">
-                            <h4>فندق أسوان الدولي</h4>
-                            <p>أسوان - راحة قبل الحدود</p>
-                            <small><i class="fas fa-clock"></i> بعد 8 ساعات</small>
-                        </div>
-                    </div>
-                    <div class="rest-stop">
-                        <div class="stop-icon"><i class="fas fa-passport"></i></div>
-                        <div class="stop-details">
-                            <h4>مركز حدود أرقين</h4>
-                            <p>إجراءات العبور والجمارك</p>
-                            <small><i class="fas fa-clock"></i> بعد 10 ساعات</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- أزرار الإجراءات الرئيسية -->
-            <div class="action-buttons main-actions">
-                <button class="btn btn-primary" id="startJourneyBtn"><i class="fas fa-play-circle"></i>بدء رحلة جديدة</button>
-                <button class="btn btn-success" id="checkDocumentsBtn"><i class="fas fa-file-check"></i>فحص المستندات</button>
-                <button class="btn btn-warning" id="emergencyBtn"><i class="fas fa-phone-alt"></i>اتصال طارئ</button>
-                <button class="btn btn-info" id="weatherBtn"><i class="fas fa-cloud-sun"></i>طريق الرحلة</button>
-                <button class="btn btn-secondary" id="supportBtn"><i class="fas fa-headset"></i>دعم على الطريق</button>
-            </div>
-        </main>
-    </div>
-
-    <!-- الفوتر المطور -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>خاتم المرسلين للرحلات</h3>
-                <p class="route-description">🇪🇬 ← 🇸🇩</p>
-                <p>نقوم بتنظيم رحلات آمنة ومريحة بين مصر والسودان منذ 2010. نضمن لكم رحلة سلسة مع كل وسائل الراحة.</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-telegram"></i></a>
-                    <a href="#"><i class="fas fa-phone"></i></a>
-                </div>
-            </div>
-            
-            <div class="footer-section">
-                <h3>مكاتبنا</h3>
-                <div class="office-location">
-                    <h4><i class="fas fa-map-marker-alt"></i> مصر</h4>
-                    <p>القاهرة: شارع رمسيس، ميدان العتبة</p>
-                    <p>الإسكندرية: شارع سعد زغلول</p>
-                    <p>أسوان: محطة السفر الدولي</p>
-                </div>
-                <div class="office-location">
-                    <h4><i class="fas fa-map-marker-alt"></i> السودان</h4>
-                    <p>الخرطوم: شارع الجامعة</p>
-                    <p>بورتسودان: ميناء البحر الأحمر</p>
-                </div>
-            </div>
-            
-            <div class="footer-section">
-                <h3>اتصل بنا</h3>
-                <p><i class="fas fa-phone"></i> مصر: 00201012345678</p>
-                <p><i class="fas fa-phone"></i> السودان: 00249123456789</p>
-                <p><i class="fas fa-envelope"></i> info@khatem-eg-sd.com</p>
-                <p><i class="fas fa-clock"></i> 24/7 خدمة العملاء</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>روابط مهمة</h3>
-                <ul class="footer-links">
-                    <li><a href="#"><i class="fas fa-chevron-left"></i>أسعار التذاكر</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-left"></i>مواعيد الرحلات</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-left"></i>متطلبات السفر</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-left"></i>الأسئلة الشائعة</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-left"></i>شروط وأحكام</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="copyright">
-            <p>© 2024 خاتم المرسلين للرحلات بين مصر والسودان. جميع الحقوق محفوظة.</p>
-            <p class="developer-credit">رحلة آمنة من قلب إلى قلب 🇪🇬 ❤️ 🇸🇩</p>
-        </div>
-    </footer>
-
-    <!-- ربط ملفات JavaScript -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="script.js"></script>
-</body>
-</html>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>🚌 منصة سبل - رحلات مصر إلى السودان</title>
